@@ -3,6 +3,7 @@
 *.pem
 salt.dat
 
+
 # Compiled source #
 ###################
 *.com
@@ -42,3 +43,8 @@ ehthumbs.db
 Thumbs.db
 
 /target/
+
+#####################
+# unexcludes
+!/Example Projects/*
+
