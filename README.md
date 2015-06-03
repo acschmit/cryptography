@@ -30,7 +30,7 @@ This library is dependent on the following jar files in <a href="http://www.boun
 * bcpkix-jdk15on.jar
 * bcprov-jdk15on.jar
 
-**Bouncy Castle is made available under the MIT licence which can be read here:**
+**Bouncy Castle is made available under the MIT license which can be read here:**
 
 [https://www.bouncycastle.org/licence.html](https://www.bouncycastle.org/licence.html)
 
