@@ -48,3 +48,4 @@ Thumbs.db
 # unexcludes
 !/Example Projects/*
 !/lib/*
+!/dist/*

@@ -24,6 +24,9 @@ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
 
+###Installation instructions
+
+
 ###External Dependencies
 This library is dependent on the following jar files in <a href="http://www.bouncycastle.org" target="_blank">Bouncy Castle Version 1.52</a>
 
@@ -35,6 +38,11 @@ This library is dependent on the following jar files in <a href="http://www.boun
 <a href="https://www.bouncycastle.org/licence.html" target="_blank">https://www.bouncycastle.org/licence.html</a>
 
 ###Examples
+
+For comprehensive examples download one of the zip files in the **Example Projects** folder of this project.  There is one zip file for Eclipse or NetBeans projects.  You can run each of the examples individually.
+
+####Example 1
+
 Adding AES256 encryption to your project can be as simple as this:
 ```java
 
