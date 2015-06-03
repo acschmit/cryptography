@@ -1,6 +1,6 @@
 # cryptography
 
-An easy to use AES and RSA cryptographic library built on the Bouncy Castle API.  With this library you can quickly and easily incorporate AES-256 and RSA encryption into your project.
+An easy to use AES and RSA cryptography library written in java, built on the Bouncy Castle API.  With this library you can quickly and easily incorporate AES-256 and RSA encryption into your project.
 
 This software is made available under the MIT License:
 
