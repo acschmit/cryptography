@@ -18,7 +18,7 @@ Either download the zip file or clone the repository to obtain the full project 
 
 * bcpkix-jdk15on.jar
 * bcprov-jdk15on.jar
-* cryptography-1.0.0.jar
+* cryptography-1.0.1.jar
 
 The remaining jar files are there if you want to attach the source, java docs or review the JUnit tests.
 
