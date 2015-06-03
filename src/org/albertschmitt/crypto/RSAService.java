@@ -24,9 +24,6 @@
  */
 package org.albertschmitt.crypto;
 
-import org.albertschmitt.crypto.common.RSAPrivateKey;
-import org.albertschmitt.crypto.common.RSAPublicKey;
-import org.albertschmitt.crypto.common.Key;
 import java.io.Closeable;
 import java.io.File;
 import java.io.FileInputStream;
@@ -39,6 +36,9 @@ import java.io.OutputStream;
 import java.io.OutputStreamWriter;
 import java.math.BigInteger;
 import java.security.SecureRandom;
+import org.albertschmitt.crypto.common.Key;
+import org.albertschmitt.crypto.common.RSAPrivateKey;
+import org.albertschmitt.crypto.common.RSAPublicKey;
 import org.bouncycastle.asn1.pkcs.PrivateKeyInfo;
 import org.bouncycastle.asn1.x509.SubjectPublicKeyInfo;
 import org.bouncycastle.crypto.AsymmetricBlockCipher;
@@ -52,7 +52,7 @@ import org.bouncycastle.crypto.util.PublicKeyFactory;
 import org.bouncycastle.crypto.util.SubjectPublicKeyInfoFactory;
 import org.bouncycastle.openssl.PEMKeyPair;
 import org.bouncycastle.openssl.PEMParser;
-import org.bouncycastle.openssl.PEMWriter;
+import org.bouncycastle.openssl.jcajce.JcaPEMWriter;
 
 /**
  * This class implements RSA private/public key encryption with a 2048 bit key
@@ -426,7 +426,9 @@ public class RSAService
 		try
 		{
 			OutputStreamWriter writer = new OutputStreamWriter(out);
-			try (PEMWriter pem = new PEMWriter(writer))
+
+//			try (PEMWriter pem = new PEMWriter(writer))
+			try (JcaPEMWriter pem = new JcaPEMWriter(writer))
 			{
 				pem.writeObject(pki);
 			}
