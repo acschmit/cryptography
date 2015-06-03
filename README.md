@@ -1,12 +1,15 @@
 # cryptography
+
 An easy to use AES and RSA cryptographic library built on the Bouncy Castle API.  With this library you can quickly and easily incorporate AES-256 and RSA encryption into your project.
 
-External Dependencies:
+External Dependencies: 
+
     Bouncy Castle Version 1.52 (http://www.bouncycastle.org)
     bcpkix-jdk15on.jar
     bcprov-jdk15on.jar
 
-Bouncy Castle is made available under the MIT licence which can be read here:
+Bouncy Castle is made available under the MIT licence which can be read here: 
+
     https://www.bouncycastle.org/licence.html
 
 This software is made available under the MIT License:
