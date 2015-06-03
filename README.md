@@ -24,9 +24,6 @@ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
 
-###Installation instructions
-
-
 ###External Dependencies
 This library is dependent on the following jar files in <a href="http://www.bouncycastle.org" target="_blank">Bouncy Castle Version 1.52</a>
 
@@ -36,6 +33,16 @@ This library is dependent on the following jar files in <a href="http://www.boun
 **Bouncy Castle is made available under the MIT license which can be read here:**
 
 <a href="https://www.bouncycastle.org/licence.html" target="_blank">https://www.bouncycastle.org/licence.html</a>
+
+###Installation instructions
+Either download the zip file or clone the repository to obtain the full project source.  All of the required jar files are in the folder named **jars** including the bouncy castle jar files.  At a minimum, copy the following files into your project:
+
+* bcpkix-jdk15on.jar
+* bcprov-jdk15on.jar
+* cryptography-1.0.0.jar
+
+The remaining jar files are there if you want to attach the source, java docs or review the JUnit tests.
+
 
 ###Examples
 
