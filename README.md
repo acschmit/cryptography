@@ -32,7 +32,7 @@ This library is dependent on the following jar files in <a href="http://www.boun
 
 **Bouncy Castle is made available under the MIT license which can be read here:**
 
-[https://www.bouncycastle.org/licence.html](https://www.bouncycastle.org/licence.html)
+<a href="https://www.bouncycastle.org/licence.html" target="_blank">https://www.bouncycastle.org/licence.html</a>
 
 ###Examples
 Adding AES256 encryption to your project can be as simple as this:
