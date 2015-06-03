@@ -25,7 +25,7 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
 
 ###External Dependencies
-[Bouncy Castle Version 1.52:](http://www.bouncycastle.org)
+This library is dependent on the following jar files in [Bouncy Castle Version 1.52:](http://www.bouncycastle.org)
 
 * bcpkix-jdk15on.jar
 * bcprov-jdk15on.jar
