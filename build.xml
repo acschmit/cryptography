@@ -91,6 +91,7 @@
 	</target>
 
 	<target name="-post-jar" depends="package-tests, package-sources, package-doc, version-jar">
+		<delete dir="jars"/>
 		<mkdir dir="jars" />
 		<copy file="dist/${ant.project.name}-${version.num}.jar" todir="jars"></copy>
 		<copy file="dist/${ant.project.name}-${version.num}-javadoc.jar" todir="jars"></copy>
