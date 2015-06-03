@@ -12,6 +12,8 @@ This library is dependent on the following jar files in <a href="http://www.boun
 * bcprov-jdk15on.jar
 
 ##Installation instructions
+This project is built in NetBeans 8.
+
 Either download the zip file or clone the repository to obtain the full project source.  All of the required jar files are in the folder named [**jars**](https://github.com/acschmit/cryptography/tree/master/jars) including the bouncy castle jar files.  At a minimum, copy the following files into your project:
 
 * bcpkix-jdk15on.jar
