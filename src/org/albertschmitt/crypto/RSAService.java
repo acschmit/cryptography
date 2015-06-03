@@ -68,7 +68,7 @@ import org.bouncycastle.openssl.jcajce.JcaPEMWriter;
  * <li>bcprov-jdk15on.jar</li>
  * </ul>
  *
- * @version 1.0.0
+ * @version 1.0.1
  * @author Albert Schmitt [acschmit] [at] [gmail] [dot] [com]
  */
 public class RSAService

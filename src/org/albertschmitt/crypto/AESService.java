@@ -24,14 +24,14 @@
  */
 package org.albertschmitt.crypto;
 
-import org.albertschmitt.crypto.common.DigestSHA;
-import org.albertschmitt.crypto.common.Hex;
-import org.albertschmitt.crypto.common.HMAC;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.security.NoSuchAlgorithmException;
 import java.security.SecureRandom;
+import org.albertschmitt.crypto.common.DigestSHA;
+import org.albertschmitt.crypto.common.HMAC;
+import org.albertschmitt.crypto.common.Hex;
 import org.bouncycastle.crypto.DataLengthException;
 import org.bouncycastle.crypto.InvalidCipherTextException;
 import org.bouncycastle.crypto.digests.SHA256Digest;
@@ -62,7 +62,7 @@ import org.bouncycastle.crypto.params.ParametersWithIV;
  * <li>bcprov-jdk15on.jar</li>
  * </ul>
  *
- * @version 1.0.0
+ * @version 1.0.1
  * @author Albert Schmitt [acschmit] [at] [gmail] [dot] [com]
  */
 public class AESService
