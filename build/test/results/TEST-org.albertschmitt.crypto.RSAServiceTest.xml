@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" ?>
-<testsuite errors="0" failures="0" hostname="Als-MacBook-Pro.local" name="org.albertschmitt.crypto.RSAServiceTest" skipped="0" tests="9" time="0.402" timestamp="2015-06-02T23:27:01">
+<testsuite errors="0" failures="0" hostname="Als-MacBook-Pro.local" name="org.albertschmitt.crypto.RSAServiceTest" skipped="0" tests="9" time="0.391" timestamp="2015-06-03T03:12:03">
   <properties>
     <property name="libs.jsp-compiler.javadoc" value="" />
     <property name="netbeans.autoupdate.country" value="US" />
@@ -64,7 +64,7 @@
     <property name="libs.j2me_common_ant.maven-pom" value="" />
     <property name="libs.spring-webmvc3.0.maven-pom" value="" />
     <property name="libs.swing-layout.maven-pom" value="" />
-    <property name="sun.java.command" value="org.apache.tools.ant.taskdefs.optional.junit.JUnitTestRunner org.albertschmitt.crypto.RSAServiceTest skipNonTests=false filtertrace=true haltOnError=false haltOnFailure=false showoutput=true outputtoformatters=true logfailedtests=true threadid=0 logtestlistenerevents=true formatter=org.apache.tools.ant.taskdefs.optional.junit.BriefJUnitResultFormatter formatter=org.apache.tools.ant.taskdefs.optional.junit.XMLJUnitResultFormatter,/Users/acschmit/Documents/NetBeansProjects/cryptography/build/test/results/TEST-org.albertschmitt.crypto.RSAServiceTest.xml crashfile=/Users/acschmit/Documents/NetBeansProjects/cryptography/build/junitvmwatcher8947130198574172465.properties propsfile=/Users/acschmit/Documents/NetBeansProjects/cryptography/build/junit5227371131979172410.properties" />
+    <property name="sun.java.command" value="org.apache.tools.ant.taskdefs.optional.junit.JUnitTestRunner org.albertschmitt.crypto.RSAServiceTest skipNonTests=false filtertrace=true haltOnError=false haltOnFailure=false showoutput=true outputtoformatters=true logfailedtests=true threadid=0 logtestlistenerevents=true formatter=org.apache.tools.ant.taskdefs.optional.junit.BriefJUnitResultFormatter formatter=org.apache.tools.ant.taskdefs.optional.junit.XMLJUnitResultFormatter,/Users/acschmit/Documents/NetBeansProjects/cryptography/build/test/results/TEST-org.albertschmitt.crypto.RSAServiceTest.xml crashfile=/Users/acschmit/Documents/NetBeansProjects/cryptography/build/junitvmwatcher433163998992201730.properties propsfile=/Users/acschmit/Documents/NetBeansProjects/cryptography/build/junit6403470336028060000.properties" />
     <property name="build.classes.dir" value="build/classes" />
     <property name="netbeans.accept_license_class" value="org.netbeans.license.AcceptLicense" />
     <property name="jnlp.descriptor" value="application" />
@@ -438,9 +438,9 @@
     <property name="awt.toolkit" value="sun.lwawt.macosx.LWCToolkit" />
     <property name="libs.javaee-web-api-7.0.javadoc" value="/Applications/NetBeans/NetBeans 8.0.1.app/Contents/Resources/NetBeans/enterprise/docs/javaee-doc-api.jar" />
   </properties>
-  <testcase classname="org.albertschmitt.crypto.RSAServiceTest" name="testGenerateKey_String_String" time="0.001" />
-  <testcase classname="org.albertschmitt.crypto.RSAServiceTest" name="testEncodeAndDecode_byteArr_Key" time="0.123" />
-  <testcase classname="org.albertschmitt.crypto.RSAServiceTest" name="testEncodeAndDecode_3args" time="0.042" />
+  <testcase classname="org.albertschmitt.crypto.RSAServiceTest" name="testEncodeAndDecode_byteArr_Key" time="0.152" />
+  <testcase classname="org.albertschmitt.crypto.RSAServiceTest" name="testGenerateKey_String_String" time="0.0" />
+  <testcase classname="org.albertschmitt.crypto.RSAServiceTest" name="testEncodeAndDecode_3args" time="0.036" />
   <testcase classname="org.albertschmitt.crypto.RSAServiceTest" name="testReadPrivateKey_String" time="0.001" />
   <testcase classname="org.albertschmitt.crypto.RSAServiceTest" name="testReadPrivateKey_InputStream" time="0.001" />
   <testcase classname="org.albertschmitt.crypto.RSAServiceTest" name="testReadPublicKey_String" time="0.001" />
@@ -448,9 +448,9 @@
   <testcase classname="org.albertschmitt.crypto.RSAServiceTest" name="testReadPublicKeyFromPrivate_String" time="0.001" />
   <testcase classname="org.albertschmitt.crypto.RSAServiceTest" name="testReadPublicKeyFromPrivate_InputStream" time="0.001" />
   <system-out><![CDATA[generateKey
-generateKey
-generateKey
 encode and decode
+generateKey
+generateKey
 generateKey
 encode and decode stream
 generateKey
