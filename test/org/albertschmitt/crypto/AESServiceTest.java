@@ -32,6 +32,9 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.UnsupportedEncodingException;
+import java.security.NoSuchAlgorithmException;
+import org.albertschmitt.crypto.common.DigestSHA;
+import org.bouncycastle.crypto.InvalidCipherTextException;
 import org.bouncycastle.util.encoders.Hex;
 import org.junit.After;
 import org.junit.AfterClass;
@@ -122,7 +125,7 @@ public class AESServiceTest
 	 *
 	 */
 	@Test
-	public void testGetHmac256Digest()
+	public void testGetHmac256Digest() throws NoSuchAlgorithmException
 	{
 		System.out.println("getHmac256Digest");
 
@@ -133,8 +136,8 @@ public class AESServiceTest
 		AESService instance = new AESService();
 		instance.generateKey(password, saltBytes);
 
-		String result = instance.getHmac256Digest(msgBytes);
-		String expResult = "34ce8cf894ee31ed0c99348e074b79e5fea788c7fc768b66a8fae88fefd9416c";
+		String result = DigestSHA.sha512(msgBytes);
+		String expResult = "25296335d88536dddd09ffb7bcc09646dd9b3f537beb78cf89c76077d39daedd0cb8e46cf1e9b06a99e59e5b8b7f66f307978dc6413426b13d1f724a0a030529";
 
 		assertEquals(expResult, result);
 	}
@@ -143,9 +146,10 @@ public class AESServiceTest
 	 * Test of encode method, of class AESService.
 	 *
 	 * @throws java.io.IOException
+	 * @throws org.bouncycastle.crypto.InvalidCipherTextException
 	 */
 	@Test
-	public void testEncodeAndDecode_byteArr() throws IOException
+	public void testEncodeAndDecode_byteArr() throws InvalidCipherTextException, IOException
 	{
 		System.out.println("encode and decode");
 
@@ -166,7 +170,7 @@ public class AESServiceTest
 	 * @throws java.io.IOException
 	 */
 	@Test
-	public void testEncodeAndDecode_InputStream_OutputStream() throws IOException
+	public void testEncodeAndDecode_InputStream_OutputStream() throws IOException, InvalidCipherTextException
 	{
 		System.out.println("encode and decode stream");
 

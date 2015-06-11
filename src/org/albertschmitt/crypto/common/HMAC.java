@@ -52,119 +52,51 @@ public final class HMAC
 		return Hex.encode(data);
 	}
 
-	public static String md5(String msg, String keyString)
+	public static String md5(String msg, String keyString) throws UnsupportedEncodingException
 	{
-		String result = "";
-		try
-		{
-			MD5Digest digest = new MD5Digest();
-			result = hmacDigest(msg.getBytes("ASCII"), keyString.getBytes("UTF-8"), digest);
-		}
-		catch (UnsupportedEncodingException ex)
-		{
-			throw new RuntimeException();
-		}
-		return result;
+		MD5Digest digest = new MD5Digest();
+		return hmacDigest(msg.getBytes("ASCII"), keyString.getBytes("UTF-8"), digest);
 	}
 
-	public static String sha1(String msg, String keyString)
+	public static String sha1(String msg, String keyString) throws UnsupportedEncodingException
 	{
-		String result = "";
-		try
-		{
-			SHA1Digest digest = new SHA1Digest();
-			result = hmacDigest(msg.getBytes("ASCII"), keyString.getBytes("UTF-8"), digest);
-		}
-		catch (UnsupportedEncodingException ex)
-		{
-			throw new RuntimeException();
-		}
-		return result;
+		SHA1Digest digest = new SHA1Digest();
+		return hmacDigest(msg.getBytes("ASCII"), keyString.getBytes("UTF-8"), digest);
 	}
 
-	public static String sha256(String msg, String keyString)
+	public static String sha256(String msg, String keyString) throws UnsupportedEncodingException
 	{
-		String result = "";
-		try
-		{
-			SHA256Digest digest = new SHA256Digest();
-			result = hmacDigest(msg.getBytes("ASCII"), keyString.getBytes("UTF-8"), digest);
-		}
-		catch (UnsupportedEncodingException ex)
-		{
-			throw new RuntimeException();
-		}
-		return result;
+		SHA256Digest digest = new SHA256Digest();
+		return hmacDigest(msg.getBytes("ASCII"), keyString.getBytes("UTF-8"), digest);
 	}
 
-	public static String sha512(String msg, String keyString)
+	public static String sha512(String msg, String keyString) throws UnsupportedEncodingException
 	{
-		String result = "";
-		try
-		{
-			SHA512Digest digest = new SHA512Digest();
-			result = hmacDigest(msg.getBytes("ASCII"), keyString.getBytes("UTF-8"), digest);
-		}
-		catch (UnsupportedEncodingException ex)
-		{
-			throw new RuntimeException();
-		}
-		return result;
+		SHA512Digest digest = new SHA512Digest();
+		return hmacDigest(msg.getBytes("ASCII"), keyString.getBytes("UTF-8"), digest);
 	}
 
-	public static String md5(String msg, byte[] keyBytes)
+	public static String md5(String msg, byte[] keyBytes) throws UnsupportedEncodingException
 	{
-		String result = "";
-		try
-		{
-			MD5Digest digest = new MD5Digest();
-			result = hmacDigest(msg.getBytes("ASCII"), keyBytes, digest);
-		}
-		catch (UnsupportedEncodingException e)
-		{
-		}
-		return result;
+		MD5Digest digest = new MD5Digest();
+		return hmacDigest(msg.getBytes("ASCII"), keyBytes, digest);
 	}
 
-	public static String sha1(String msg, byte[] keyBytes)
+	public static String sha1(String msg, byte[] keyBytes) throws UnsupportedEncodingException
 	{
-		String result = "";
-		try
-		{
-			SHA1Digest digest = new SHA1Digest();
-			result = hmacDigest(msg.getBytes("ASCII"), keyBytes, digest);
-		}
-		catch (UnsupportedEncodingException e)
-		{
-		}
-		return result;
+		SHA1Digest digest = new SHA1Digest();
+		return hmacDigest(msg.getBytes("ASCII"), keyBytes, digest);
 	}
 
-	public static String sha256(String msg, byte[] keyBytes)
+	public static String sha256(String msg, byte[] keyBytes) throws UnsupportedEncodingException
 	{
-		String result = "";
-		try
-		{
-			SHA256Digest digest = new SHA256Digest();
-			result = hmacDigest(msg.getBytes("ASCII"), keyBytes, digest);
-		}
-		catch (UnsupportedEncodingException e)
-		{
-		}
-		return result;
+		SHA256Digest digest = new SHA256Digest();
+		return hmacDigest(msg.getBytes("ASCII"), keyBytes, digest);
 	}
 
-	public static String sha512(String msg, byte[] keyBytes)
+	public static String sha512(String msg, byte[] keyBytes) throws UnsupportedEncodingException
 	{
-		String result = "";
-		try
-		{
-			SHA512Digest digest = new SHA512Digest();
-			result = hmacDigest(msg.getBytes("ASCII"), keyBytes, digest);
-		}
-		catch (UnsupportedEncodingException e)
-		{
-		}
-		return result;
+		SHA512Digest digest = new SHA512Digest();
+		return hmacDigest(msg.getBytes("ASCII"), keyBytes, digest);
 	}
 }

@@ -34,6 +34,7 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.io.OutputStreamWriter;
+import java.io.UnsupportedEncodingException;
 import java.math.BigInteger;
 import java.security.SecureRandom;
 import org.albertschmitt.crypto.common.Key;
@@ -53,6 +54,7 @@ import org.bouncycastle.crypto.util.SubjectPublicKeyInfoFactory;
 import org.bouncycastle.openssl.PEMKeyPair;
 import org.bouncycastle.openssl.PEMParser;
 import org.bouncycastle.openssl.jcajce.JcaPEMWriter;
+import org.bouncycastle.util.encoders.Hex;
 
 /**
  * This class implements RSA private/public key encryption with a 2048 bit key
@@ -125,7 +127,7 @@ public class RSAService
 	 * @param forEncryption True to encrypt, false to decrypt.
 	 * @return The encrypted data.
 	 */
-	private byte[] doCipher(byte[] data, Key key, Boolean forEncryption)
+	private byte[] doCipher(byte[] data, Key key, Boolean forEncryption) throws InvalidCipherTextException
 	{
 		AsymmetricBlockCipher cipher = getCipher(key, forEncryption);
 
@@ -140,15 +142,8 @@ public class RSAService
 			blocksize = (remainder > enc_length) ? enc_length : remainder;
 			if (blocksize != 0)
 			{
-				try
-				{
-					byte[] enc = cipher.processBlock(data, offset, blocksize);
-					bytes = concatenate(bytes, enc);
-				}
-				catch (InvalidCipherTextException ex)
-				{
-					throw new RuntimeException();
-				}
+				byte[] enc = cipher.processBlock(data, offset, blocksize);
+				bytes = concatenate(bytes, enc);
 			}
 			offset += enc_length;
 		}
@@ -167,27 +162,20 @@ public class RSAService
 	 * @param key The key to be used.
 	 * @param forEncryption True to encrypt, false to decrypt.
 	 */
-	private void doCipher(InputStream instream, OutputStream outstream, Key key, Boolean forEncryption)
+	private void doCipher(InputStream instream, OutputStream outstream, Key key, Boolean forEncryption) throws IOException, InvalidCipherTextException
 	{
-		try
-		{
-			AsymmetricBlockCipher cipher = getCipher(key, forEncryption);
+		AsymmetricBlockCipher cipher = getCipher(key, forEncryption);
 
-			int enc_length = (forEncryption) ? ENC_LENGTH - PADDING_PKCS1 : ENC_LENGTH;
-			byte[] inbuf = new byte[enc_length];
-			int blocksize = enc_length;
+		int enc_length = (forEncryption) ? ENC_LENGTH - PADDING_PKCS1 : ENC_LENGTH;
+		byte[] inbuf = new byte[enc_length];
+		int blocksize = enc_length;
 
-			while ((blocksize = instream.read(inbuf, 0, blocksize)) != -1)
-			{
-				byte[] enc = cipher.processBlock(inbuf, 0, blocksize);
-				outstream.write(enc, 0, enc.length);
-			}
-			outstream.flush();
-		}
-		catch (IOException | InvalidCipherTextException ex)
+		while ((blocksize = instream.read(inbuf, 0, blocksize)) != -1)
 		{
-			throw new RuntimeException();
+			byte[] enc = cipher.processBlock(inbuf, 0, blocksize);
+			outstream.write(enc, 0, enc.length);
 		}
+		outstream.flush();
 	}
 
 	/**
@@ -196,11 +184,18 @@ public class RSAService
 	 * @param data RSA encoded byte array.
 	 * @param key The key to be used.
 	 * @return The RSA encoded data.
+	 * @throws org.bouncycastle.crypto.InvalidCipherTextException
 	 * @see #decode(byte[] data, Key key)
 	 */
-	public byte[] encode(byte[] data, Key key)
+	public byte[] encode(byte[] data, Key key) throws InvalidCipherTextException
 	{
 		return doCipher(data, key, true);
+	}
+
+	public byte[] encode(String data, Key key) throws InvalidCipherTextException, UnsupportedEncodingException
+	{
+		byte[] bytes = data.getBytes("UTF-8");
+		return doCipher(bytes, key, true);
 	}
 
 	/**
@@ -209,11 +204,18 @@ public class RSAService
 	 * @param data RSA encoded byte array.
 	 * @param key The key to be used.
 	 * @return Decoded byte array of RSA encoded input data.
+	 * @throws org.bouncycastle.crypto.InvalidCipherTextException
 	 * @see #encode(byte[] data, Key key)
 	 */
-	public byte[] decode(byte[] data, Key key)
+	public byte[] decode(byte[] data, Key key) throws InvalidCipherTextException
 	{
 		return doCipher(data, key, false);
+	}
+
+	public byte[] decode(String data, Key key) throws InvalidCipherTextException
+	{
+		byte[] bytes = Hex.decode(data);
+		return doCipher(bytes, key, false);
 	}
 
 	/**
@@ -222,8 +224,10 @@ public class RSAService
 	 * @param instream Stream to be encoded.
 	 * @param outstream RSA encoded output stream of input stream.
 	 * @param key The key to be used.
+	 * @throws java.io.IOException
+	 * @throws org.bouncycastle.crypto.InvalidCipherTextException
 	 */
-	public void encode(InputStream instream, OutputStream outstream, Key key)
+	public void encode(InputStream instream, OutputStream outstream, Key key) throws IOException, InvalidCipherTextException
 	{
 		doCipher(instream, outstream, key, true);
 	}
@@ -234,8 +238,10 @@ public class RSAService
 	 * @param instream RSA encoded input stream to be decoded.
 	 * @param outstream Decoded output stream of input stream.
 	 * @param key The key to be used.
+	 * @throws java.io.IOException
+	 * @throws org.bouncycastle.crypto.InvalidCipherTextException
 	 */
-	public void decode(InputStream instream, OutputStream outstream, Key key)
+	public void decode(InputStream instream, OutputStream outstream, Key key) throws IOException, InvalidCipherTextException
 	{
 		doCipher(instream, outstream, key, false);
 	}
@@ -245,8 +251,9 @@ public class RSAService
 	 *
 	 * @param filename The file that contains the RSA Private Key.
 	 * @return The RSAPrivateKey.
+	 * @throws java.io.FileNotFoundException
 	 */
-	public RSAPrivateKey readPrivateKey(String filename)
+	public RSAPrivateKey readPrivateKey(String filename) throws FileNotFoundException, IOException
 	{
 		FileInputStream in = null;
 		RSAPrivateKey key = null;
@@ -254,10 +261,6 @@ public class RSAService
 		{
 			in = new FileInputStream(filename);
 			key = readPrivateKey(in);
-		}
-		catch (FileNotFoundException ex)
-		{
-			throw new RuntimeException();
 		}
 		finally
 		{
@@ -271,31 +274,20 @@ public class RSAService
 	 *
 	 * @param in The input stream that contains the RSA Private Key.
 	 * @return The RSAPrivateKey.
+	 * @throws java.io.IOException
 	 */
-	public RSAPrivateKey readPrivateKey(InputStream in)
+	public RSAPrivateKey readPrivateKey(InputStream in) throws IOException
 	{
-		RSAPrivateKey key = null;
-		try
+		InputStreamReader reader = new InputStreamReader(in);
+		PEMKeyPair pkp;
+		try (PEMParser pem = new PEMParser(reader))
 		{
-			InputStreamReader reader = new InputStreamReader(in);
-			PEMKeyPair pkp;
-			try (PEMParser pem = new PEMParser(reader))
-			{
-				pkp = (PEMKeyPair) pem.readObject();
-			}
+			pkp = (PEMKeyPair) pem.readObject();
+		}
 
-			PrivateKeyInfo pki = pkp.getPrivateKeyInfo();
-			key = new RSAPrivateKey();
-			key.setPki(pki);
-		}
-		catch (IOException ex)
-		{
-			throw new RuntimeException();
-		}
-		catch (Exception ex)
-		{
-			throw new RuntimeException();
-		}
+		PrivateKeyInfo pki = pkp.getPrivateKeyInfo();
+		RSAPrivateKey key = new RSAPrivateKey();
+		key.setPki(pki);
 		return key;
 	}
 
@@ -304,8 +296,9 @@ public class RSAService
 	 *
 	 * @param filename The file that contains the RSA Public Key.
 	 * @return The RSAPublicKey.
+	 * @throws java.io.FileNotFoundException
 	 */
-	public RSAPublicKey readPublicKey(String filename)
+	public RSAPublicKey readPublicKey(String filename) throws FileNotFoundException, IOException
 	{
 		FileInputStream in = null;
 		RSAPublicKey key = null;
@@ -313,10 +306,6 @@ public class RSAService
 		{
 			in = new FileInputStream(filename);
 			key = readPublicKey(in);
-		}
-		catch (FileNotFoundException ex)
-		{
-			throw new RuntimeException();
 		}
 		finally
 		{
@@ -330,28 +319,21 @@ public class RSAService
 	 *
 	 * @param in The input stream that contains the RSA Public Key.
 	 * @return The RSAPublicKey.
+	 * @throws java.io.IOException
 	 */
-	public RSAPublicKey readPublicKey(InputStream in)
+	public RSAPublicKey readPublicKey(InputStream in) throws IOException
 	{
-		RSAPublicKey key = null;
-		try
+		InputStreamReader reader = new InputStreamReader(in);
+		SubjectPublicKeyInfo pki;
+		try (PEMParser pem = new PEMParser(reader))
 		{
-			InputStreamReader reader = new InputStreamReader(in);
-			SubjectPublicKeyInfo pki;
-			try (PEMParser pem = new PEMParser(reader))
-			{
-				pki = (SubjectPublicKeyInfo) pem.readObject();
-			}
-
-			byte[] data = pki.getEncoded();
-			key = new RSAPublicKey();
-			key.setKey(PublicKeyFactory.createKey(data));
-
+			pki = (SubjectPublicKeyInfo) pem.readObject();
 		}
-		catch (IOException ex)
-		{
-			throw new RuntimeException();
-		}
+
+		byte[] data = pki.getEncoded();
+		RSAPublicKey key = new RSAPublicKey();
+		key.setKey(PublicKeyFactory.createKey(data));
+
 		return key;
 	}
 
@@ -361,8 +343,9 @@ public class RSAService
 	 *
 	 * @param filename The file that contains the RSA Public Key.
 	 * @return The RSAPublicKey.
+	 * @throws java.io.FileNotFoundException
 	 */
-	public RSAPublicKey readPublicKeyFromPrivate(String filename)
+	public RSAPublicKey readPublicKeyFromPrivate(String filename) throws FileNotFoundException, IOException
 	{
 		FileInputStream in = null;
 		RSAPublicKey key = null;
@@ -370,10 +353,6 @@ public class RSAService
 		{
 			in = new FileInputStream(filename);
 			key = readPublicKeyFromPrivate(in);
-		}
-		catch (FileNotFoundException ex)
-		{
-			throw new RuntimeException();
 		}
 		finally
 		{
@@ -388,29 +367,22 @@ public class RSAService
 	 *
 	 * @param in The input stream that contains the RSA Public Key.
 	 * @return The RSAPublicKey.
+	 * @throws java.io.IOException
 	 */
-	public RSAPublicKey readPublicKeyFromPrivate(InputStream in)
+	public RSAPublicKey readPublicKeyFromPrivate(InputStream in) throws IOException
 	{
-		RSAPublicKey key = null;
-		try
+		InputStreamReader reader = new InputStreamReader(in);
+		org.bouncycastle.openssl.PEMKeyPair pkp;
+		try (PEMParser pem = new PEMParser(reader))
 		{
-			InputStreamReader reader = new InputStreamReader(in);
-			org.bouncycastle.openssl.PEMKeyPair pkp;
-			try (PEMParser pem = new PEMParser(reader))
-			{
-				pkp = (org.bouncycastle.openssl.PEMKeyPair) pem.readObject();
-			}
-
-			SubjectPublicKeyInfo pki = pkp.getPublicKeyInfo();
-			byte[] data = pki.getEncoded();
-			key = new RSAPublicKey();
-			key.setKey(PublicKeyFactory.createKey(data));
-
+			pkp = (org.bouncycastle.openssl.PEMKeyPair) pem.readObject();
 		}
-		catch (IOException ex)
-		{
-			throw new RuntimeException();
-		}
+
+		SubjectPublicKeyInfo pki = pkp.getPublicKeyInfo();
+		byte[] data = pki.getEncoded();
+		RSAPublicKey key = new RSAPublicKey();
+		key.setKey(PublicKeyFactory.createKey(data));
+
 		return key;
 	}
 
@@ -421,21 +393,12 @@ public class RSAService
 	 * @param out The stream to write the RSA key to.
 	 * @param pki The Key to be written to the stream.
 	 */
-	private void writeKey(OutputStream out, Object pki)
+	private void writeKey(OutputStream out, Object pki) throws IOException
 	{
-		try
+		OutputStreamWriter writer = new OutputStreamWriter(out);
+		try (JcaPEMWriter pem = new JcaPEMWriter(writer))
 		{
-			OutputStreamWriter writer = new OutputStreamWriter(out);
-
-//			try (PEMWriter pem = new PEMWriter(writer))
-			try (JcaPEMWriter pem = new JcaPEMWriter(writer))
-			{
-				pem.writeObject(pki);
-			}
-		}
-		catch (IOException ex)
-		{
-			throw new RuntimeException();
+			pem.writeObject(pki);
 		}
 	}
 
@@ -446,21 +409,10 @@ public class RSAService
 	 * @param keyPair The Private Key.
 	 * @param out The stream the Private Key is to be written to.
 	 */
-	private void writePrivateKey(AsymmetricCipherKeyPair keyPair, OutputStream out)
+	private void writePrivateKey(AsymmetricCipherKeyPair keyPair, OutputStream out) throws IOException
 	{
-		try
-		{
-			PrivateKeyInfo pki = PrivateKeyInfoFactory.createPrivateKeyInfo(keyPair.getPrivate());
-			writeKey(out, pki);
-		}
-		catch (IOException ex)
-		{
-			throw new RuntimeException();
-		}
-		catch (Exception ex)
-		{
-			throw new RuntimeException();
-		}
+		PrivateKeyInfo pki = PrivateKeyInfoFactory.createPrivateKeyInfo(keyPair.getPrivate());
+		writeKey(out, pki);
 	}
 
 	/**
@@ -470,21 +422,10 @@ public class RSAService
 	 * @param keyPair The Public Key.
 	 * @param out The stream the Public Key is to be written to.
 	 */
-	private void writePublicKey(AsymmetricCipherKeyPair keyPair, OutputStream out)
+	private void writePublicKey(AsymmetricCipherKeyPair keyPair, OutputStream out) throws IOException
 	{
-		try
-		{
-			SubjectPublicKeyInfo pki = SubjectPublicKeyInfoFactory.createSubjectPublicKeyInfo(keyPair.getPublic());
-			writeKey(out, pki);
-		}
-		catch (IOException ex)
-		{
-			throw new RuntimeException();
-		}
-		catch (Exception ex)
-		{
-			throw new RuntimeException();
-		}
+		SubjectPublicKeyInfo pki = SubjectPublicKeyInfoFactory.createSubjectPublicKeyInfo(keyPair.getPublic());
+		writeKey(out, pki);
 	}
 
 	/**
@@ -495,8 +436,9 @@ public class RSAService
 	 * be written.
 	 * @param public_filename The file name to which the RSA Public Key will be
 	 * written.
+	 * @throws java.io.FileNotFoundException
 	 */
-	public void generateKey(String private_filename, String public_filename)
+	public void generateKey(String private_filename, String public_filename) throws FileNotFoundException, IOException
 	{
 		FileOutputStream fos_public = null;
 		try
@@ -504,10 +446,6 @@ public class RSAService
 			FileOutputStream fos_private = new FileOutputStream(private_filename);
 			fos_public = new FileOutputStream(public_filename);
 			generateKey(fos_private, fos_public);
-		}
-		catch (FileNotFoundException ex)
-		{
-			throw new RuntimeException();
 		}
 		finally
 		{
@@ -522,26 +460,20 @@ public class RSAService
 	 * @param os_private The stream to which the RSA Private Key will be
 	 * written.
 	 * @param os_public The stream to which the RSA Public Key will be written.
+	 * @throws java.io.IOException
 	 */
-	public void generateKey(OutputStream os_private, OutputStream os_public)
+	public void generateKey(OutputStream os_private, OutputStream os_public) throws IOException
 	{
-		try
-		{
-			BigInteger publicExponent = new BigInteger("10001", 16);
-			SecureRandom secure = new SecureRandom();
-			RSAKeyGenerationParameters kparams = new RSAKeyGenerationParameters(publicExponent, secure, RSA_STRENGTH, 80);
+		BigInteger publicExponent = new BigInteger("10001", 16);
+		SecureRandom secure = new SecureRandom();
+		RSAKeyGenerationParameters kparams = new RSAKeyGenerationParameters(publicExponent, secure, RSA_STRENGTH, 80);
 
-			RSAKeyPairGenerator kpg = new RSAKeyPairGenerator();
-			kpg.init(kparams);
-			AsymmetricCipherKeyPair keyPair = kpg.generateKeyPair();
+		RSAKeyPairGenerator kpg = new RSAKeyPairGenerator();
+		kpg.init(kparams);
+		AsymmetricCipherKeyPair keyPair = kpg.generateKeyPair();
 
-			writePrivateKey(keyPair, os_private);
-			writePublicKey(keyPair, os_public);
-		}
-		catch (Exception ex)
-		{
-			throw new RuntimeException();
-		}
+		writePrivateKey(keyPair, os_private);
+		writePublicKey(keyPair, os_public);
 	}
 
 	/**
@@ -581,7 +513,6 @@ public class RSAService
 		}
 		catch (IOException ex)
 		{
-			throw new RuntimeException();
 		}
 	}
 }

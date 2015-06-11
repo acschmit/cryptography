@@ -75,18 +75,12 @@ public class RSAPrivateKey extends Key
 
 	/**
 	 * @param pki the pki to set
+	 * @throws java.io.IOException
 	 */
-	public final void setPki(PrivateKeyInfo pki)
+	public final void setPki(PrivateKeyInfo pki) throws IOException
 	{
-		try
-		{
-			this.pki = pki;
-			byte[] data = pki.getEncoded();
-			setKey(PrivateKeyFactory.createKey(data));
-		}
-		catch (IOException ex)
-		{
-			throw new RuntimeException();
-		}
+		this.pki = pki;
+		byte[] data = pki.getEncoded();
+		setKey(PrivateKeyFactory.createKey(data));
 	}
 }

@@ -29,10 +29,12 @@ import java.io.ByteArrayOutputStream;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
+import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import org.albertschmitt.crypto.common.RSAPrivateKey;
 import org.albertschmitt.crypto.common.RSAPublicKey;
+import org.bouncycastle.crypto.InvalidCipherTextException;
 import org.junit.After;
 import org.junit.AfterClass;
 import static org.junit.Assert.assertArrayEquals;
@@ -85,7 +87,7 @@ public class RSAServiceTest
 	 * Test of generateKey method, of class RSAService.
 	 */
 	@Test
-	public final void testGenerateKey_String_String() throws Exception
+	public final void testGenerateKey_String_String() throws FileNotFoundException, IOException
 	{
 		System.out.println("generateKey");
 		final RSAService rsa = new RSAService();
@@ -102,10 +104,11 @@ public class RSAServiceTest
 	/**
 	 * Test of encode method, of class RSAService.
 	 *
-	 * @throws java.lang.Exception
+	 * @throws java.io.IOException
+	 * @throws org.bouncycastle.crypto.InvalidCipherTextException
 	 */
 	@Test
-	public void testEncodeAndDecode_byteArr_Key() throws Exception
+	public void testEncodeAndDecode_byteArr_Key() throws IOException, InvalidCipherTextException
 	{
 		System.out.println("encode and decode");
 
@@ -127,10 +130,11 @@ public class RSAServiceTest
 	/**
 	 * Test of encode method, of class RSAService.
 	 *
-	 * @throws java.lang.Exception
+	 * @throws java.io.IOException
+	 * @throws org.bouncycastle.crypto.InvalidCipherTextException
 	 */
 	@Test
-	public void testEncodeAndDecode_3args() throws Exception
+	public void testEncodeAndDecode_3args() throws IOException, InvalidCipherTextException
 	{
 		System.out.println("encode and decode stream");
 
@@ -161,10 +165,10 @@ public class RSAServiceTest
 	/**
 	 * Test of readPrivateKey method, of class RSAService.
 	 *
-	 * @throws java.lang.Exception
+	 * @throws java.io.IOException
 	 */
 	@Test
-	public void testReadPrivateKey_String() throws Exception
+	public void testReadPrivateKey_String() throws IOException
 	{
 		System.out.println("readPrivateKey");
 		RSAService instance = new RSAService();
@@ -174,10 +178,10 @@ public class RSAServiceTest
 	/**
 	 * Test of readPrivateKey method, of class RSAService.
 	 *
-	 * @throws java.lang.Exception
+	 * @throws java.io.FileNotFoundException
 	 */
 	@Test
-	public void testReadPrivateKey_InputStream() throws Exception
+	public void testReadPrivateKey_InputStream() throws FileNotFoundException, IOException
 	{
 		System.out.println("readPrivateKey");
 		InputStream in = new FileInputStream(privateKeyfile);
@@ -188,10 +192,10 @@ public class RSAServiceTest
 	/**
 	 * Test of readPublicKey method, of class RSAService.
 	 *
-	 * @throws java.lang.Exception
+	 * @throws java.io.IOException
 	 */
 	@Test
-	public void testReadPublicKey_String() throws Exception
+	public void testReadPublicKey_String() throws IOException
 	{
 		System.out.println("readPublicKey");
 		RSAService instance = new RSAService();
@@ -201,10 +205,10 @@ public class RSAServiceTest
 	/**
 	 * Test of readPublicKey method, of class RSAService.
 	 *
-	 * @throws java.lang.Exception
+	 * @throws java.io.FileNotFoundException
 	 */
 	@Test
-	public void testReadPublicKey_InputStream() throws Exception
+	public void testReadPublicKey_InputStream() throws FileNotFoundException, IOException
 	{
 		System.out.println("readPublicKey");
 		InputStream in = new FileInputStream(publicKeyfile);
@@ -215,10 +219,10 @@ public class RSAServiceTest
 	/**
 	 * Test of readPublicKeyFromPrivate method, of class RSAService.
 	 *
-	 * @throws java.lang.Exception
+	 * @throws java.io.IOException
 	 */
 	@Test
-	public void testReadPublicKeyFromPrivate_String() throws Exception
+	public void testReadPublicKeyFromPrivate_String() throws IOException
 	{
 		System.out.println("readPublicKeyFromPrivate");
 		RSAService instance = new RSAService();
@@ -228,10 +232,10 @@ public class RSAServiceTest
 	/**
 	 * Test of readPublicKeyFromPrivate method, of class RSAService.
 	 *
-	 * @throws java.lang.Exception
+	 * @throws java.io.FileNotFoundException
 	 */
 	@Test
-	public void testReadPublicKeyFromPrivate_InputStream() throws Exception
+	public void testReadPublicKeyFromPrivate_InputStream() throws FileNotFoundException, IOException
 	{
 		System.out.println("readPublicKeyFromPrivate");
 		InputStream in = new FileInputStream(privateKeyfile);
