@@ -63,10 +63,10 @@ public final class Hex
 	/**
 	 * Convert a byte array into a hexadecimal string.
 	 *
-	 * @param data The byte array to bve converted into a hexadecimal string.
+	 * @param data The byte array to bvte converted into a hexadecimal string.
 	 * @return A hexadecimal string representation of the byte data.
 	 */
-	public static String encode(byte data[])
+	public static String encode(byte[] data)
 	{
 		StringBuilder sb = new StringBuilder();
 		for (int i = 0; i < data.length; i++)

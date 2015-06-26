@@ -34,12 +34,13 @@ import java.io.InputStream;
 import java.io.UnsupportedEncodingException;
 import java.security.NoSuchAlgorithmException;
 import org.albertschmitt.crypto.common.DigestSHA;
+import org.albertschmitt.crypto.common.Hex;
 import org.bouncycastle.crypto.InvalidCipherTextException;
-import org.bouncycastle.util.encoders.Hex;
 import org.junit.After;
 import org.junit.AfterClass;
 import static org.junit.Assert.assertArrayEquals;
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
@@ -53,10 +54,11 @@ public class AESServiceTest
 
 	private final String password;
 	private final byte[] msgBytes;
+	private final String msgString;
 	private static final String CHARSET = "UTF-8";
 
 	private static final String SALT_DAT = "./salt.dat";
-	private static final int SALT_LENGTH = 64;
+	private static final int SALT_LENGTH = 32;
 
 	public AESServiceTest() throws UnsupportedEncodingException, IOException
 	{
@@ -65,7 +67,8 @@ public class AESServiceTest
 		sb.append("Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim ");
 		sb.append("veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit");
 
-		msgBytes = sb.toString().getBytes(CHARSET);
+		msgString = sb.toString();
+		msgBytes = msgString.getBytes(CHARSET);
 		password = "ZJ=ENY'2H+0bm'oyIe6J";
 
 		testGenerateSalt();
@@ -104,6 +107,8 @@ public class AESServiceTest
 		byte[] saltBytes = instance.generateSalt();
 
 		writeSaltBytes(saltBytes);
+
+		assertNotNull(saltBytes);
 	}
 
 	/**
@@ -118,6 +123,7 @@ public class AESServiceTest
 		instance.generateKey();
 
 		byte[] result = instance.getAesKey();
+		assertNotNull(result);
 	}
 
 	/**
@@ -151,7 +157,7 @@ public class AESServiceTest
 	@Test
 	public void testEncodeAndDecode_byteArr() throws InvalidCipherTextException, IOException
 	{
-		System.out.println("encode and decode");
+		System.out.println("encode and decode byte array");
 
 		byte[] saltBytes = readSaltBytes();
 
@@ -164,10 +170,28 @@ public class AESServiceTest
 		assertArrayEquals(msgBytes, decData);
 	}
 
+	@Test
+	public void testEncodeAndDecode_String() throws InvalidCipherTextException, IOException
+	{
+		System.out.println("encode and decode String");
+
+		byte[] saltBytes = readSaltBytes();
+
+		AESService instance = new AESService();
+		instance.generateKey(password, saltBytes);
+
+		byte[] encData = instance.encode(msgString);
+		String encString = Hex.encode(encData);
+		byte[] decData = instance.decode(encString);
+
+		assertArrayEquals(msgBytes, decData);
+	}
+
 	/**
 	 * Test of encode method, of class AESService.
 	 *
 	 * @throws java.io.IOException
+	 * @throws org.bouncycastle.crypto.InvalidCipherTextException
 	 */
 	@Test
 	public void testEncodeAndDecode_InputStream_OutputStream() throws IOException, InvalidCipherTextException
@@ -180,12 +204,21 @@ public class AESServiceTest
 		instance.generateKey(password, saltBytes);
 
 		byte[] decData;
+		byte[] encData;
 		try (InputStream instream = new ByteArrayInputStream(msgBytes);
 			 ByteArrayOutputStream outstream = new ByteArrayOutputStream())
 		{
 			instance.encode(instream, outstream);
-			byte[] encData = outstream.toByteArray();
+			encData = outstream.toByteArray();
 			decData = instance.decode(encData);
+		}
+		assertArrayEquals(msgBytes, decData);
+
+		try (InputStream instream = new ByteArrayInputStream(encData);
+			 ByteArrayOutputStream outstream = new ByteArrayOutputStream())
+		{
+			instance.decode(instream, outstream);
+			decData = outstream.toByteArray();
 		}
 		assertArrayEquals(msgBytes, decData);
 	}
@@ -200,6 +233,9 @@ public class AESServiceTest
 		System.out.println("generateKey");
 		AESService instance = new AESService();
 		instance.generateKey();
+
+		byte[] aes_key = instance.getAesKey();
+		assertNotNull(aes_key);
 	}
 
 	/**
@@ -216,6 +252,9 @@ public class AESServiceTest
 
 		AESService instance = new AESService();
 		instance.generateKey(password, saltBytes);
+
+		byte[] aes_key = instance.getAesKey();
+		assertNotNull(aes_key);
 	}
 
 	/**
@@ -230,12 +269,14 @@ public class AESServiceTest
 		instance.generateKey();
 
 		byte[] result = instance.getAesKey();
+		assertNotNull(result);
+
 		instance.setAesKey(result);
 	}
-
 	//--------------------------------------------------------------------------
 	// Support functions.
 	//--------------------------------------------------------------------------
+
 	private byte[] readSaltBytes() throws FileNotFoundException, IOException
 	{
 		byte[] saltBytes;

@@ -57,7 +57,6 @@ import org.bouncycastle.util.encoders.Hex;
  * <li>bcprov-jdk15on.jar</li>
  * </ul>
  *
- * @version 1.0.1
  * @author Albert Schmitt [acschmit] [at] [gmail] [dot] [com]
  */
 public class AESService
@@ -66,7 +65,7 @@ public class AESService
 	/**
 	 * The size in bytes of the salt.
 	 */
-	public final static int SALT_SIZE = 64;
+	public final static int SALT_SIZE = 32;
 
 	private final static int IV_LENGTH = 16;
 	protected final static int AES_128 = 128;
@@ -291,9 +290,6 @@ public class AESService
 	 * encrypted with the key. The recipient would then decrypt the key using
 	 * RSA then use the key to decrypt the data.
 	 *
-	 * <p>
-	 * This method also creates an HMAC key for use by the method.</p>
-	 *
 	 * @see #getAesKey()
 	 */
 	public void generateKey()
@@ -312,7 +308,7 @@ public class AESService
 	 * Generate an AES key using a given password and salt.
 	 *
 	 * @param password The password to be used to create the key.
-	 * @param salt The 64 byte long array to be used to create the key.
+	 * @param salt The 32 byte long array to be used to create the key.
 	 * @see #generateSalt()
 	 * @see #getAesKey()
 	 */
@@ -327,7 +323,7 @@ public class AESService
 
 	/**
 	 * Generate a salt value using SecureRandom() that can be used to generate
-	 * an AES256 key. The salt is 64 bytes in length.
+	 * an AES256 key. The salt is 32 bytes in length.
 	 *
 	 * @return Byte array containing the salt.
 	 */

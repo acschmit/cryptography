@@ -70,7 +70,6 @@ import org.bouncycastle.util.encoders.Hex;
  * <li>bcprov-jdk15on.jar</li>
  * </ul>
  *
- * @version 1.0.1
  * @author Albert Schmitt [acschmit] [at] [gmail] [dot] [com]
  */
 public class RSAService
@@ -108,7 +107,7 @@ public class RSAService
 	 *
 	 * @param key The RSA key.
 	 * @param forEncryption True if encrypting, false if decrypting.
-	 * @return AsymmetricBlockCipher configured to encrypt or decrypt
+	 * @return AsymmetricBlockCipher configured to encrypt or decrypt.
 	 */
 	private AsymmetricBlockCipher getCipher(Key key, Boolean forEncryption)
 	{
@@ -179,9 +178,9 @@ public class RSAService
 	}
 
 	/**
-	 * Decode the RSA encoded byte data and return it in an byte array.
+	 * Encode the byte data and return it in an byte array.
 	 *
-	 * @param data RSA encoded byte array.
+	 * @param data The byte array to be encoded.
 	 * @param key The key to be used.
 	 * @return The RSA encoded data.
 	 * @throws org.bouncycastle.crypto.InvalidCipherTextException
@@ -192,6 +191,15 @@ public class RSAService
 		return doCipher(data, key, true);
 	}
 
+	/**
+	 * Encode the String and return it in an byte array.
+	 *
+	 * @param data The String to be encoded.
+	 * @param key The key to be used.
+	 * @return The RSA encoded data.
+	 * @throws org.bouncycastle.crypto.InvalidCipherTextException
+	 * @see #decode(byte[] data, Key key)
+	 */
 	public byte[] encode(String data, Key key) throws InvalidCipherTextException, UnsupportedEncodingException
 	{
 		byte[] bytes = data.getBytes("UTF-8");
@@ -212,6 +220,15 @@ public class RSAService
 		return doCipher(data, key, false);
 	}
 
+	/**
+	 * Decode the RSA encoded String and return it in an byte array.
+	 *
+	 * @param data RSA encoded String.
+	 * @param key The key to be used.
+	 * @return Decoded byte array of RSA encoded input data.
+	 * @throws org.bouncycastle.crypto.InvalidCipherTextException
+	 * @see #encode(byte[] data, Key key)
+	 */
 	public byte[] decode(String data, Key key) throws InvalidCipherTextException
 	{
 		byte[] bytes = Hex.decode(data);

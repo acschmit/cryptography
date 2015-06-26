@@ -70,7 +70,7 @@
     nbproject/build-impl.xml file.
 
 	-->
-	<property name="version.num" value="1.0.3" />
+	<property name="version.num" value="1.0.4" />
 
 	<target name="-pre-jar" depends="test"/>
 
