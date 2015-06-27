@@ -2,6 +2,8 @@
 
 An easy to use AES and RSA cryptography library written in java, built on the Bouncy Castle API.  With this library you can quickly and easily incorporate AES-256 and RSA encryption into your project.
 
+If you develop in both Java and C# then this project and the <a href="https://github.com/acschmit/cryptography.Net" target="_blank">C# project</a> are worth taking a look at.  They share the same API.  The Unit Tests and Examples are the same between them as well to illustrate their similarity.
+
 ##License
 The [license](LICENSE.txt), including licenses for dependent software, can be read [here](LICENSE.txt).
 
