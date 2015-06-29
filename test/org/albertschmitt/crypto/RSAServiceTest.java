@@ -32,12 +32,16 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import org.albertschmitt.crypto.common.RSAPrivateKey;
 import org.albertschmitt.crypto.common.RSAPublicKey;
 import org.bouncycastle.crypto.InvalidCipherTextException;
 import org.junit.After;
 import org.junit.AfterClass;
 import static org.junit.Assert.assertArrayEquals;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertTrue;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
@@ -68,8 +72,11 @@ public class RSAServiceTest
 	}
 
 	@BeforeClass
-	public static void setUpClass()
+	public static void setUpClass() throws IOException
 	{
+		System.out.println("Deleting data files.");
+		Files.deleteIfExists(Paths.get(privateKeyfile));
+		Files.deleteIfExists(Paths.get(publicKeyfile));
 	}
 
 	@AfterClass
@@ -89,6 +96,8 @@ public class RSAServiceTest
 
 	/**
 	 * Test of generateKey method, of class RSAService.
+	 *
+	 * @throws java.io.FileNotFoundException if file not found.
 	 */
 	@Test
 	public final void testGenerateKey_String_String() throws FileNotFoundException, IOException
@@ -102,6 +111,7 @@ public class RSAServiceTest
 			final OutputStream fos_public = new FileOutputStream(publicKeyfile);
 			rsa.generateKey(fos_private, fos_public);
 			System.out.println("Finish Generating RSA Key Pair.");
+			assertTrue(true);
 		}
 	}
 
@@ -177,6 +187,7 @@ public class RSAServiceTest
 		System.out.println("readPrivateKey");
 		RSAService instance = new RSAService();
 		RSAPrivateKey privateKey = instance.readPrivateKey(privateKeyfile);
+		assertNotNull(privateKey);
 	}
 
 	/**
@@ -191,6 +202,7 @@ public class RSAServiceTest
 		InputStream in = new FileInputStream(privateKeyfile);
 		RSAService instance = new RSAService();
 		RSAPrivateKey result = instance.readPrivateKey(in);
+		assertNotNull(result);
 	}
 
 	/**
@@ -204,6 +216,7 @@ public class RSAServiceTest
 		System.out.println("readPublicKey");
 		RSAService instance = new RSAService();
 		RSAPublicKey publicKey = instance.readPublicKey(publicKeyfile);
+		assertNotNull(publicKey);
 	}
 
 	/**
@@ -218,6 +231,7 @@ public class RSAServiceTest
 		InputStream in = new FileInputStream(publicKeyfile);
 		RSAService instance = new RSAService();
 		RSAPublicKey result = instance.readPublicKey(in);
+		assertNotNull(result);
 	}
 
 	/**
@@ -231,6 +245,7 @@ public class RSAServiceTest
 		System.out.println("readPublicKeyFromPrivate");
 		RSAService instance = new RSAService();
 		RSAPublicKey result = instance.readPublicKeyFromPrivate(privateKeyfile);
+		assertNotNull(result);
 	}
 
 	/**
@@ -245,5 +260,6 @@ public class RSAServiceTest
 		InputStream in = new FileInputStream(privateKeyfile);
 		RSAService instance = new RSAService();
 		RSAPrivateKey result = instance.readPrivateKey(in);
+		assertNotNull(result);
 	}
 }

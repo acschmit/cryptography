@@ -32,6 +32,8 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.UnsupportedEncodingException;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.security.NoSuchAlgorithmException;
 import org.albertschmitt.crypto.common.DigestSHA;
 import org.albertschmitt.crypto.common.Hex;
@@ -75,8 +77,10 @@ public class AESServiceTest
 	}
 
 	@BeforeClass
-	public static void setUpClass()
+	public static void setUpClass() throws IOException
 	{
+		System.out.println("Deleting data files.");
+		Files.deleteIfExists(Paths.get(SALT_DAT));
 	}
 
 	@AfterClass
