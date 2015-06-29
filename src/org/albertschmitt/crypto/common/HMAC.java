@@ -33,6 +33,12 @@ import org.bouncycastle.crypto.digests.SHA512Digest;
 import org.bouncycastle.crypto.macs.HMac;
 import org.bouncycastle.crypto.params.KeyParameter;
 
+/**
+ * Keyed-Hash Message Authentication Code class. Use this class to verify the
+ * data integrity and authenticity of a message.
+ *
+ * @author acschmit
+ */
 public final class HMAC
 {
 

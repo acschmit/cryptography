@@ -26,6 +26,11 @@ package org.albertschmitt.crypto.common;
 public class Compare
 {
 
+	/**
+	 * Cryptographically safe comparison functions. These functions should take
+	 * the same time to complete regardless if they evaluate to true or false.
+	 * That way, attackers can gain no additional information when hacking.
+	 */
 	private Compare()
 	{
 	}

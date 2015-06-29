@@ -63,7 +63,7 @@ public final class Hex
 	/**
 	 * Convert a byte array into a hexadecimal string.
 	 *
-	 * @param data The byte array to bvte converted into a hexadecimal string.
+	 * @param data The byte array to be converted into a hexadecimal string.
 	 * @return A hexadecimal string representation of the byte data.
 	 */
 	public static String encode(byte[] data)

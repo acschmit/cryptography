@@ -87,6 +87,11 @@ public final class DigestSHA
 		return digest(data, DigestType.MD5);
 	}
 
+	public static String md5(InputStream is) throws NoSuchAlgorithmException, IOException
+	{
+		return digest(is, DigestType.MD5);
+	}
+
 	public static String sha1(byte[] data) throws NoSuchAlgorithmException
 	{
 		return digest(data, DigestType.SHA1);

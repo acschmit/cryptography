@@ -71,7 +71,7 @@ public class AESService
 	protected final static int AES_128 = 128;
 	protected final static int AES_256 = 256;
 
-	private static int key_size;
+	private int key_size;
 	private KeyParameter aes_key = null;
 
 	/**
@@ -90,7 +90,7 @@ public class AESService
 	 *
 	 * @return The key size.
 	 */
-	protected static int getAESKeySize()
+	protected int getAESKeySize()
 	{
 		return key_size;
 	}
@@ -103,11 +103,11 @@ public class AESService
 	 * values.
 	 * @throws Exception Thrown if the key size is not 128 or 256.
 	 */
-	protected static void setAESKeySize(int key_size) throws Exception
+	protected void setAESKeySize(int key_size) throws Exception
 	{
 		if (key_size == AES_128 || key_size == AES_256)
 		{
-			AESService.key_size = key_size;
+			this.key_size = key_size;
 		}
 		else
 		{
