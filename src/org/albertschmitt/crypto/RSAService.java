@@ -100,8 +100,9 @@ public class RSAService
 		}
 	}
 
-	private KEYSIZE keysize;
+	private final KEYSIZE keysize;
 	private static final int PADDING_PKCS1 = 11;
+	private static final int BUFFER_SIZE = 8192;
 
 	/**
 	 * Create an instance of the RSAService using a 2048 bit key.
@@ -324,13 +325,13 @@ public class RSAService
 	/**
 	 * Read the RSA Private Key from the specified input stream.
 	 *
-	 * @param in The input stream that contains the RSA Private Key.
+	 * @param instream The input stream that contains the RSA Private Key.
 	 * @return The RSAPrivateKey.
 	 * @throws java.io.IOException
 	 */
-	public RSAPrivateKey readPrivateKey(InputStream in) throws IOException
+	public RSAPrivateKey readPrivateKey(InputStream instream) throws IOException
 	{
-		InputStreamReader reader = new InputStreamReader(in);
+		InputStreamReader reader = new InputStreamReader(instream);
 		PEMKeyPair pkp;
 		try (PEMParser pem = new PEMParser(reader))
 		{
@@ -393,7 +394,7 @@ public class RSAService
 	 * Extract the Public Key from the RSA Private Key from the file and return
 	 * it to the client.
 	 *
-	 * @param filename The file that contains the RSA Public Key.
+	 * @param filename The file that contains the RSA Private Key.
 	 * @return The RSAPublicKey.
 	 * @throws java.io.FileNotFoundException
 	 */
@@ -417,7 +418,7 @@ public class RSAService
 	 * Extract the Public Key from the RSA Private Key from the input stream and
 	 * return it to the client.
 	 *
-	 * @param in The input stream that contains the RSA Public Key.
+	 * @param in The input stream that contains the RSA Private Key.
 	 * @return The RSAPublicKey.
 	 * @throws java.io.IOException
 	 */
