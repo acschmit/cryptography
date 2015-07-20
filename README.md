@@ -4,7 +4,6 @@ An easy to use AES and RSA cryptography library written in java, built on the Bo
 
 If you develop in both Java and C# then this project and the <a href="https://github.com/acschmit/cryptography.Net" target="_blank">C# project</a> are worth taking a look at.  They share the same API.  The Unit Tests and Examples are the same between them as well to illustrate their similarity.
 
-<<<<<<< HEAD
 ## Version 1.0.7 Updates
 ### Project
 * Add project to Maven. This project is not in the Maven Central Repository yet. When you compile this project it will add the cryptography-1.0.7.jar file, javadoc and source jars to your local repository.  When you add the jar to your project it will automatically add the depencencies.
@@ -27,8 +26,6 @@ If you develop in both Java and C# then this project and the <a href="https://gi
 * Added function to read private key with password.
 * Updated Javadocs.
  
-=======
->>>>>>> origin/master
 ##Key Structure
 Bouncy Castle saves PEM keys in PKCS#1 format but it can read PEM keys in PKCS#8 format as well.
 
