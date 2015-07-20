@@ -4,6 +4,8 @@
 salt.dat
 *.der
 
+nb-configuration.xml
+
 # Compiled source #
 ###################
 *.com
