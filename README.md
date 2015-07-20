@@ -49,10 +49,9 @@ Create a new Maven project and search the repository for **org.albertschmitt**. 
 * bcpkix-jdk15on.jar
 * bcprov-jdk15on.jar
 
-<!--
-For comprehensive examples download the zip file in the **Example Projects** folder of this project. You can run each of the examples individually.
--->
 ##Examples
+
+For comprehensive examples see my other project [cryptography-examples](https://github.com/acschmit/cryptography-examples).
 
 ####Example 1
 
