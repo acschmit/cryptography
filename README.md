@@ -19,7 +19,7 @@ If you develop in both Java and C# then this project and the <a href="https://gi
 
 ###RSAService
 * Default key size is 2048-bits.
-* Added KEYSIZE enumerator to allow configuratoin for 3k or 4k keys if desired.
+* Added KEYSIZE enumerator to allow configuration for 3k or 4k keys if desired.
 * Added constructor to allow creation of 3k or 4k encryption instance. 
 * Updated source to use try with resources (Java 7 or later).
 * Added function to generate private key with password.
