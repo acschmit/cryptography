@@ -37,7 +37,6 @@ import org.bouncycastle.crypto.params.KeyParameter;
  * Keyed-Hash Message Authentication Code class. Use this class to verify the
  * data integrity and authenticity of a message.
  *
- * @author acschmit
  */
 public final class HMAC
 {
@@ -58,51 +57,51 @@ public final class HMAC
 		return Hex.encode(data);
 	}
 
-	public static String md5(String msg, String keyString) throws UnsupportedEncodingException
+	public static String md5(byte[] msg, byte[] keyBytes) throws UnsupportedEncodingException
 	{
 		MD5Digest digest = new MD5Digest();
-		return hmacDigest(msg.getBytes("ASCII"), keyString.getBytes("UTF-8"), digest);
+		return hmacDigest(msg, keyBytes, digest);
 	}
 
-	public static String sha1(String msg, String keyString) throws UnsupportedEncodingException
+	public static String sha1(byte[] msg, byte[] keyBytes) throws UnsupportedEncodingException
 	{
 		SHA1Digest digest = new SHA1Digest();
-		return hmacDigest(msg.getBytes("ASCII"), keyString.getBytes("UTF-8"), digest);
+		return hmacDigest(msg, keyBytes, digest);
 	}
 
-	public static String sha256(String msg, String keyString) throws UnsupportedEncodingException
+	public static String sha256(byte[] msg, byte[] keyBytes) throws UnsupportedEncodingException
 	{
 		SHA256Digest digest = new SHA256Digest();
-		return hmacDigest(msg.getBytes("ASCII"), keyString.getBytes("UTF-8"), digest);
+		return hmacDigest(msg, keyBytes, digest);
 	}
 
-	public static String sha512(String msg, String keyString) throws UnsupportedEncodingException
+	public static String sha512(byte[] msg, byte[] keyBytes) throws UnsupportedEncodingException
 	{
 		SHA512Digest digest = new SHA512Digest();
-		return hmacDigest(msg.getBytes("ASCII"), keyString.getBytes("UTF-8"), digest);
+		return hmacDigest(msg, keyBytes, digest);
 	}
 
 	public static String md5(String msg, byte[] keyBytes) throws UnsupportedEncodingException
 	{
 		MD5Digest digest = new MD5Digest();
-		return hmacDigest(msg.getBytes("ASCII"), keyBytes, digest);
+		return hmacDigest(msg.getBytes("UTF-8"), keyBytes, digest);
 	}
 
 	public static String sha1(String msg, byte[] keyBytes) throws UnsupportedEncodingException
 	{
 		SHA1Digest digest = new SHA1Digest();
-		return hmacDigest(msg.getBytes("ASCII"), keyBytes, digest);
+		return hmacDigest(msg.getBytes("UTF-8"), keyBytes, digest);
 	}
 
 	public static String sha256(String msg, byte[] keyBytes) throws UnsupportedEncodingException
 	{
 		SHA256Digest digest = new SHA256Digest();
-		return hmacDigest(msg.getBytes("ASCII"), keyBytes, digest);
+		return hmacDigest(msg.getBytes("UTF-8"), keyBytes, digest);
 	}
 
 	public static String sha512(String msg, byte[] keyBytes) throws UnsupportedEncodingException
 	{
 		SHA512Digest digest = new SHA512Digest();
-		return hmacDigest(msg.getBytes("ASCII"), keyBytes, digest);
+		return hmacDigest(msg.getBytes("UTF-8"), keyBytes, digest);
 	}
 }
