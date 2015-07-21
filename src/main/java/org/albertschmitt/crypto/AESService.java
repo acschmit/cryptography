@@ -311,11 +311,11 @@ public class AESService
 	 * @see #generateSalt()
 	 * @see #getAesKey()
 	 */
-	public void generateKey(String password, byte[] salt)
+	public void generateKey(char[] password, byte[] salt)
 	{
 		PKCS5S2ParametersGenerator generator = new PKCS5S2ParametersGenerator();
 
-		byte[] passwordBytes = PKCS5S2ParametersGenerator.PKCS5PasswordToUTF8Bytes(password.toCharArray());
+		byte[] passwordBytes = PKCS5S2ParametersGenerator.PKCS5PasswordToUTF8Bytes(password);
 		generator.init(passwordBytes, salt, 20000);
 		aes_key = (KeyParameter) generator.generateDerivedParameters(keysize.getKeySize());
 	}
