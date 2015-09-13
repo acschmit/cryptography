@@ -39,24 +39,13 @@ import org.bouncycastle.crypto.util.PrivateKeyFactory;
 public class RSAPrivateKey extends Key
 {
 
-	private PrivateKeyInfo pki = null;
-
-	/**
-	 * @return the pki
-	 */
-	public final PrivateKeyInfo getPki()
-	{
-		return pki;
-	}
-
 	/**
 	 * @param pki the pki to set
 	 * @throws java.io.IOException
 	 */
-	public final void setPki(PrivateKeyInfo pki) throws IOException
+	public final void setKey(PrivateKeyInfo pki) throws IOException
 	{
-		this.pki = pki;
 		byte[] data = pki.getEncoded();
-		setKey(PrivateKeyFactory.createKey(data));
+		super.setKey(PrivateKeyFactory.createKey(data));
 	}
 }
