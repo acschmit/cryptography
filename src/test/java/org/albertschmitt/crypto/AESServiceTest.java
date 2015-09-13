@@ -54,7 +54,7 @@ import org.junit.Test;
 public class AESServiceTest
 {
 
-	private final String password;
+	private final char[] password;
 	private final byte[] msgBytes;
 	private final String msgString;
 	private static final String CHARSET = "UTF-8";
@@ -71,7 +71,7 @@ public class AESServiceTest
 
 		msgString = sb.toString();
 		msgBytes = msgString.getBytes(CHARSET);
-		password = "ZJ=ENY'2H+0bm'oyIe6J";
+		password = "ZJ=ENY'2H+0bm'oyIe6J".toCharArray();
 
 		testGenerateSalt();
 	}
