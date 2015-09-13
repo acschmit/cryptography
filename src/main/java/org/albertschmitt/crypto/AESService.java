@@ -29,6 +29,7 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.io.UnsupportedEncodingException;
 import java.security.SecureRandom;
+import org.albertschmitt.crypto.common.ByteUtil;
 import org.bouncycastle.crypto.InvalidCipherTextException;
 import org.bouncycastle.crypto.engines.AESEngine;
 import org.bouncycastle.crypto.generators.PKCS5S2ParametersGenerator;
@@ -109,22 +110,6 @@ public class AESService
 	}
 
 	/**
-	 * Concatenate two byte arrays together.
-	 *
-	 * @param a First byte array.
-	 * @param b Second byte array.
-	 * @return Byte array containing First + Second byte array.
-	 */
-	private byte[] concatenate(byte[] a, byte[] b)
-	{
-		byte[] dest = new byte[a.length + b.length];
-		System.arraycopy(a, 0, dest, 0, a.length);
-		System.arraycopy(b, 0, dest, a.length, b.length);
-
-		return dest;
-	}
-
-	/**
 	 * Return a PaddedBufferedBlockCipher for encryption or decryption.
 	 *
 	 * @param iv The initialization vector.
@@ -163,7 +148,7 @@ public class AESService
 		int length1 = cipher.processBytes(data, 0, data.length, enc, 0);
 		cipher.doFinal(enc, length1);
 
-		byte[] encrypted = concatenate(iv, enc);
+		byte[] encrypted = ByteUtil.concatenate(iv, enc);
 		return encrypted;
 	}
 
@@ -337,7 +322,7 @@ public class AESService
 	/**
 	 * Get the AES key that was created by {@link #generateKey() generateKey()}
 	 * or
-	 * {@link #generateKey(String password, byte[] salt) generateKey(String password, byte[] salt)}
+	 * {@link #generateKey(char[] password, byte[] salt) generateKey(char[] password, byte[] salt)}
 	 *
 	 * @return Byte array containing the AES key.
 	 * @see #setAesKey(byte[] data)
