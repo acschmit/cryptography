@@ -31,6 +31,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 
@@ -57,7 +58,6 @@ public class RSAServiceTest
 	private static final String	publicKeyfileEnc	= "./public_key.pem_enc";
 
 	private final byte[]		msgBytes;
-	private static final String	CHARSET	= "UTF-8";
 
 	// This is the RSA key size we will use for the tests.
 	private final RSAService.KEYSIZE keysize = RSAService.KEYSIZE.RSA_2K;
@@ -72,7 +72,7 @@ public class RSAServiceTest
 		sb.append(
 				"veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit");
 
-		msgBytes = sb.toString().getBytes(CHARSET);
+		msgBytes = sb.toString().getBytes(StandardCharsets.UTF_8);
 
 		testGenerateKey_String_String();
 	}

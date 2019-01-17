@@ -28,6 +28,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.io.UnsupportedEncodingException;
+import java.nio.charset.StandardCharsets;
 import java.security.SecureRandom;
 import org.albertschmitt.crypto.common.ByteUtil;
 import org.bouncycastle.crypto.InvalidCipherTextException;
@@ -164,7 +165,7 @@ public class AESService
 	public byte[] encode(String data) throws UnsupportedEncodingException,
 											 InvalidCipherTextException
 	{
-		byte[] bytes = data.getBytes("UTF-8");
+		byte[] bytes = data.getBytes(StandardCharsets.UTF_8);
 		return encode(bytes);
 	}
 

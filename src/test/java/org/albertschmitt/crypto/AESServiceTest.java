@@ -24,27 +24,23 @@
  */
 package org.albertschmitt.crypto;
 
+import static org.junit.Assert.assertArrayEquals;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
+
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.UnsupportedEncodingException;
-import java.nio.file.Files;
-import java.nio.file.Paths;
+import java.nio.charset.StandardCharsets;
 import java.security.NoSuchAlgorithmException;
+
 import org.albertschmitt.crypto.common.DigestSHA;
 import org.albertschmitt.crypto.common.Hex;
 import org.bouncycastle.crypto.InvalidCipherTextException;
 import org.junit.After;
-import org.junit.AfterClass;
-import static org.junit.Assert.assertArrayEquals;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
 import org.junit.Before;
-import org.junit.BeforeClass;
 import org.junit.Test;
 
 /**
@@ -53,48 +49,36 @@ import org.junit.Test;
  */
 public class AESServiceTest
 {
-
-	private final char[] password;
-	private final byte[] msgBytes;
-	private final String msgString;
-	private static final String CHARSET = "UTF-8";
-
-	private static final String SALT_DAT = "./salt.dat";
-	private static final int SALT_LENGTH = 32;
-
-	public AESServiceTest() throws UnsupportedEncodingException, IOException
-	{
-		StringBuilder sb = new StringBuilder();
-		sb.append("esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.");
-		sb.append("Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim ");
-		sb.append("veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit");
-
-		msgString = sb.toString();
-		msgBytes = msgString.getBytes(CHARSET);
-		password = "ZJ=ENY'2H+0bm'oyIe6J".toCharArray();
-
-		testGenerateSalt();
-	}
-
-	@BeforeClass
-	public static void setUpClass()
-	{
-	}
-
-	@AfterClass
-	public static void tearDownClass() throws IOException
-	{
-		Files.deleteIfExists(Paths.get(SALT_DAT));
-	}
+	private byte[]				saltBytes;
+	private char[]				password;
+	private byte[]				msgBytes;
+	private String				msgString;
 
 	@Before
-	public void setUp()
+	public void setUp() throws UnsupportedEncodingException
 	{
+		StringBuilder sb = new StringBuilder();
+		sb.append(
+				"esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.");
+		sb.append(
+				"Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim ");
+		sb.append(
+				"veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit");
+
+		msgString = sb.toString();
+		msgBytes = msgString.getBytes(StandardCharsets.UTF_8);
+		password = "ZJ=ENY'2H+0bm'oyIe6J".toCharArray();
+		String saltString = "253a3dd3a9aef71ca1fa2b8b3704d6724ba474342e3c2e4fd124ee74d2c56017f4a7c22951a99978c6fdfbbefb4cf775d5642ea6dcb4d9b8e164fc23099f36c4";
+		saltBytes = Hex.decode(saltString);
 	}
 
 	@After
 	public void tearDown()
 	{
+		msgString = null;
+		msgBytes = null;
+		password = null;
+		saltBytes = null;
 	}
 
 	/**
@@ -108,8 +92,6 @@ public class AESServiceTest
 		System.out.println("generateSalt");
 		AESService instance = new AESService();
 		byte[] saltBytes = instance.generateSalt();
-
-		writeSaltBytes(saltBytes);
 
 		assertNotNull(saltBytes);
 	}
@@ -138,10 +120,6 @@ public class AESServiceTest
 	{
 		System.out.println("getHmac256Digest");
 
-		// Need to use a hard coded salt so we get a predictable result from getHmac256Digest().
-		String saltString = "253a3dd3a9aef71ca1fa2b8b3704d6724ba474342e3c2e4fd124ee74d2c56017f4a7c22951a99978c6fdfbbefb4cf775d5642ea6dcb4d9b8e164fc23099f36c4";
-		byte[] saltBytes = Hex.decode(saltString);
-
 		AESService instance = new AESService();
 		instance.generateKey(password, saltBytes);
 
@@ -162,8 +140,6 @@ public class AESServiceTest
 	{
 		System.out.println("encode and decode byte array");
 
-		byte[] saltBytes = readSaltBytes();
-
 		AESService instance = new AESService();
 		instance.generateKey(password, saltBytes);
 
@@ -177,8 +153,6 @@ public class AESServiceTest
 	public void testEncodeAndDecode_String() throws InvalidCipherTextException, IOException
 	{
 		System.out.println("encode and decode String");
-
-		byte[] saltBytes = readSaltBytes();
 
 		AESService instance = new AESService();
 		instance.generateKey(password, saltBytes);
@@ -200,8 +174,6 @@ public class AESServiceTest
 	public void testEncodeAndDecode_InputStream_OutputStream() throws IOException, InvalidCipherTextException
 	{
 		System.out.println("encode and decode stream");
-
-		byte[] saltBytes = readSaltBytes();
 
 		AESService instance = new AESService();
 		instance.generateKey(password, saltBytes);
@@ -251,8 +223,6 @@ public class AESServiceTest
 	{
 		System.out.println("generateKey");
 
-		byte[] saltBytes = readSaltBytes();
-
 		AESService instance = new AESService();
 		instance.generateKey(password, saltBytes);
 
@@ -275,27 +245,5 @@ public class AESServiceTest
 		assertNotNull(result);
 
 		instance.setAesKey(result);
-	}
-	//--------------------------------------------------------------------------
-	// Support functions.
-	//--------------------------------------------------------------------------
-
-	private byte[] readSaltBytes() throws FileNotFoundException, IOException
-	{
-		byte[] saltBytes;
-		try (FileInputStream is = new FileInputStream(SALT_DAT))
-		{
-			saltBytes = new byte[SALT_LENGTH];
-			is.read(saltBytes);
-		}
-		return saltBytes;
-	}
-
-	private void writeSaltBytes(byte[] saltBytes1) throws FileNotFoundException, IOException
-	{
-		try (final FileOutputStream os = new FileOutputStream(SALT_DAT))
-		{
-			os.write(saltBytes1);
-		}
 	}
 }

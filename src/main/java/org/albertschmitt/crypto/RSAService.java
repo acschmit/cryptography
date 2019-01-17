@@ -30,6 +30,7 @@ import java.io.OutputStream;
 import java.io.OutputStreamWriter;
 import java.io.UnsupportedEncodingException;
 import java.math.BigInteger;
+import java.nio.charset.StandardCharsets;
 import java.security.KeyPair;
 import java.security.KeyPairGenerator;
 import java.security.NoSuchAlgorithmException;
@@ -69,11 +70,14 @@ import org.bouncycastle.util.io.pem.PemGenerationException;
 import org.bouncycastle.util.io.pem.PemObject;
 
 /**
- * This class implements RSA private/public key encryption with a 2048 bit key using the Bouncy Castle API. Clients can
- * use this class to easily incorporate encryption into their applications. Note when converting between strings and
+ * This class implements RSA private/public key encryption with a 2048 bit key
+ * using the Bouncy Castle API. Clients can use this class to easily incorporate
+ * encryption into their applications. Note when converting between strings and
  * byte arrays clients should be sure to convert using the UTF-8 character set.
  * <p>
- * External Dependencies: <a target="top" href="http://www.bouncycastle.org/">Bouncy Castle Release 1.52</a>
+ * External Dependencies:
+ * <a target="top" href="http://www.bouncycastle.org/">Bouncy Castle Release
+ * 1.52</a>
  * </p>
  * <ul>
  * <li>bcpkix-jdk15on.jar</li>
@@ -111,8 +115,8 @@ public class RSAService
 		}
 	}
 
-	private final KEYSIZE		keysize;
-	private static final int	PADDING_PKCS1	= 11;
+	private final KEYSIZE keysize;
+	private static final int PADDING_PKCS1 = 11;
 
 	/**
 	 * Create an instance of the RSAService using a 2048 bit key.
@@ -125,8 +129,7 @@ public class RSAService
 	/**
 	 * Create an instance of the RSAService class using the specified key size.
 	 *
-	 * @param keysize
-	 *            The key size to create.
+	 * @param keysize The key size to create.
 	 */
 	public RSAService(KEYSIZE keysize)
 	{
@@ -136,10 +139,8 @@ public class RSAService
 	/**
 	 * Return an AsymmetricBlockCipher for encryption or decryption.
 	 *
-	 * @param key
-	 *            The RSA key.
-	 * @param forEncryption
-	 *            True if encrypting, false if decrypting.
+	 * @param key The RSA key.
+	 * @param forEncryption True if encrypting, false if decrypting.
 	 * @return AsymmetricBlockCipher configured to encrypt or decrypt.
 	 */
 	private AsymmetricBlockCipher getCipher(Key key, Boolean forEncryption)
@@ -151,15 +152,12 @@ public class RSAService
 	}
 
 	/**
-	 * Encrypt or decrypt a stream and send the result to an output stream. TBD explain data size limit and why we're
-	 * using a loop to get around it.
+	 * Encrypt or decrypt a stream and send the result to an output stream. TBD
+	 * explain data size limit and why we're using a loop to get around it.
 	 *
-	 * @param data
-	 *            The data to be encrypted.
-	 * @param key
-	 *            The key to be used.
-	 * @param forEncryption
-	 *            True to encrypt, false to decrypt.
+	 * @param data The data to be encrypted.
+	 * @param key The key to be used.
+	 * @param forEncryption True to encrypt, false to decrypt.
 	 * @return The encrypted data.
 	 */
 	private byte[] doCipher(byte[] data, Key key, Boolean forEncryption) throws InvalidCipherTextException
@@ -192,14 +190,10 @@ public class RSAService
 	/**
 	 * Encrypt or decrypt a stream and send the result to an output stream.
 	 *
-	 * @param instream
-	 *            The input stream to be encrypted.
-	 * @param outstream
-	 *            The encrypted stream.
-	 * @param key
-	 *            The key to be used.
-	 * @param forEncryption
-	 *            True to encrypt, false to decrypt.
+	 * @param instream The input stream to be encrypted.
+	 * @param outstream The encrypted stream.
+	 * @param key The key to be used.
+	 * @param forEncryption True to encrypt, false to decrypt.
 	 */
 	private void doCipher(InputStream instream, OutputStream outstream, Key key, Boolean forEncryption)
 			throws IOException, InvalidCipherTextException
@@ -221,10 +215,8 @@ public class RSAService
 	/**
 	 * Encode the byte data and return it in an byte array.
 	 *
-	 * @param data
-	 *            The byte array to be encoded.
-	 * @param key
-	 *            The key to be used.
+	 * @param data The byte array to be encoded.
+	 * @param key The key to be used.
 	 * @return The RSA encoded data.
 	 * @throws org.bouncycastle.crypto.InvalidCipherTextException
 	 * @see #decode(byte[] data, Key key)
@@ -237,10 +229,8 @@ public class RSAService
 	/**
 	 * Encode the String and return it in an byte array.
 	 *
-	 * @param data
-	 *            The String to be encoded.
-	 * @param key
-	 *            The key to be used.
+	 * @param data The String to be encoded.
+	 * @param key The key to be used.
 	 * @return The RSA encoded data.
 	 * @throws org.bouncycastle.crypto.InvalidCipherTextException
 	 * @throws java.io.UnsupportedEncodingException
@@ -248,17 +238,15 @@ public class RSAService
 	 */
 	public byte[] encode(String data, Key key) throws InvalidCipherTextException, UnsupportedEncodingException
 	{
-		byte[] bytes = data.getBytes("UTF-8");
+		byte[] bytes = data.getBytes(StandardCharsets.UTF_8);
 		return doCipher(bytes, key, true);
 	}
 
 	/**
 	 * Decode the RSA encoded byte data and return it in an byte array.
 	 *
-	 * @param data
-	 *            RSA encoded byte array.
-	 * @param key
-	 *            The key to be used.
+	 * @param data RSA encoded byte array.
+	 * @param key The key to be used.
 	 * @return Decoded byte array of RSA encoded input data.
 	 * @throws org.bouncycastle.crypto.InvalidCipherTextException
 	 * @see #encode(byte[] data, Key key)
@@ -271,10 +259,8 @@ public class RSAService
 	/**
 	 * Decode the RSA encoded String and return it in an byte array.
 	 *
-	 * @param data
-	 *            RSA encoded String.
-	 * @param key
-	 *            The key to be used.
+	 * @param data RSA encoded String.
+	 * @param key The key to be used.
 	 * @return Decoded byte array of RSA encoded input data.
 	 * @throws org.bouncycastle.crypto.InvalidCipherTextException
 	 * @see #encode(byte[] data, Key key)
@@ -288,12 +274,9 @@ public class RSAService
 	/**
 	 * Encode the input stream to RSA and return it in an output stream.
 	 *
-	 * @param instream
-	 *            Stream to be encoded.
-	 * @param outstream
-	 *            RSA encoded output stream of input stream.
-	 * @param key
-	 *            The key to be used.
+	 * @param instream Stream to be encoded.
+	 * @param outstream RSA encoded output stream of input stream.
+	 * @param key The key to be used.
 	 * @throws java.io.IOException
 	 * @throws org.bouncycastle.crypto.InvalidCipherTextException
 	 */
@@ -306,12 +289,9 @@ public class RSAService
 	/**
 	 * Decode the RSA encoded input stream and return it in an output stream.
 	 *
-	 * @param instream
-	 *            RSA encoded input stream to be decoded.
-	 * @param outstream
-	 *            Decoded output stream of input stream.
-	 * @param key
-	 *            The key to be used.
+	 * @param instream RSA encoded input stream to be decoded.
+	 * @param outstream Decoded output stream of input stream.
+	 * @param key The key to be used.
 	 * @throws java.io.IOException
 	 * @throws org.bouncycastle.crypto.InvalidCipherTextException
 	 */
@@ -324,8 +304,7 @@ public class RSAService
 	/**
 	 * Read the RSA Private Key from the specified filename.
 	 *
-	 * @param filename
-	 *            The file that contains the RSA Private Key.
+	 * @param filename The file that contains the RSA Private Key.
 	 * @return The RSAPrivateKey.
 	 * @throws java.io.FileNotFoundException
 	 */
@@ -342,8 +321,7 @@ public class RSAService
 	/**
 	 * Read the RSA Private Key from the specified input stream.
 	 *
-	 * @param instream
-	 *            The input stream that contains the RSA Private Key.
+	 * @param instream The input stream that contains the RSA Private Key.
 	 * @return The RSAPrivateKey or null if the key is invalid.
 	 * @throws java.io.IOException
 	 */
@@ -369,12 +347,11 @@ public class RSAService
 	}
 
 	/**
-	 * Read the RSA Private Key from the specified filename using the given password.
+	 * Read the RSA Private Key from the specified filename using the given
+	 * password.
 	 *
-	 * @param filename
-	 *            The file that contains the RSA Private Key.
-	 * @param password
-	 *            The password the private key was encrypted with.
+	 * @param filename The file that contains the RSA Private Key.
+	 * @param password The password the private key was encrypted with.
 	 * @return The RSAPrivateKey.
 	 * @throws FileNotFoundException
 	 * @throws IOException
@@ -393,12 +370,11 @@ public class RSAService
 	}
 
 	/**
-	 * Read the RSA Private Key from the specified input stream using the given password.
+	 * Read the RSA Private Key from the specified input stream using the given
+	 * password.
 	 *
-	 * @param instream
-	 *            The input stream that contains the RSA Private Key.
-	 * @param password
-	 *            The password the private key was encrypted with.
+	 * @param instream The input stream that contains the RSA Private Key.
+	 * @param password The password the private key was encrypted with.
 	 * @return The RSAPrivateKey.
 	 * @throws IOException
 	 * @throws OperatorCreationException
@@ -428,8 +404,7 @@ public class RSAService
 	/**
 	 * Read the PKCS8 Private Key DER from the specified filename.
 	 *
-	 * @param filename
-	 *            The file that contains the RSA Private Key.
+	 * @param filename The file that contains the RSA Private Key.
 	 * @return The RSAPrivateKey.
 	 * @throws FileNotFoundException
 	 * @throws IOException
@@ -447,8 +422,7 @@ public class RSAService
 	/**
 	 * Read the PKCS8 Private Key DER from the specified input stream.
 	 *
-	 * @param instream
-	 *            The input stream that contains the RSA Private Key.
+	 * @param instream The input stream that contains the RSA Private Key.
 	 * @return The RSAPrivateKey.
 	 * @throws IOException
 	 */
@@ -494,8 +468,7 @@ public class RSAService
 	/**
 	 * Read the RSA Public Key from the specified filename.
 	 *
-	 * @param filename
-	 *            The file that contains the RSA Public Key.
+	 * @param filename The file that contains the RSA Public Key.
 	 * @return The RSAPublicKey.
 	 * @throws java.io.FileNotFoundException
 	 */
@@ -512,8 +485,7 @@ public class RSAService
 	/**
 	 * Read the RSA Public Key from the specified input stream.
 	 *
-	 * @param instream
-	 *            The input stream that contains the RSA Public Key.
+	 * @param instream The input stream that contains the RSA Public Key.
 	 * @return The RSAPublicKey.
 	 * @throws java.io.IOException
 	 */
@@ -538,8 +510,7 @@ public class RSAService
 	/**
 	 * Read the DER Public Key from the specified filename.
 	 *
-	 * @param filename
-	 *            The file that contains the DER key.
+	 * @param filename The file that contains the DER key.
 	 * @return RSAPublicKey.
 	 * @throws FileNotFoundException
 	 * @throws IOException
@@ -557,8 +528,7 @@ public class RSAService
 	/**
 	 * Read the DER Public Key from the specified input stream.
 	 *
-	 * @param instream
-	 *            The stream that contains the DER key.
+	 * @param instream The stream that contains the DER key.
 	 * @return RSAPublicKey.
 	 * @throws IOException
 	 */
@@ -572,10 +542,10 @@ public class RSAService
 	}
 
 	/**
-	 * Extract the Public Key from the RSA Private Key from the file and return it to the client.
+	 * Extract the Public Key from the RSA Private Key from the file and return
+	 * it to the client.
 	 *
-	 * @param filename
-	 *            The file that contains the RSA Private Key.
+	 * @param filename The file that contains the RSA Private Key.
 	 * @return The RSAPublicKey.
 	 * @throws java.io.FileNotFoundException
 	 */
@@ -590,10 +560,10 @@ public class RSAService
 	}
 
 	/**
-	 * Extract the Public Key from the RSA Private Key from the input stream and return it to the client.
+	 * Extract the Public Key from the RSA Private Key from the input stream and
+	 * return it to the client.
 	 *
-	 * @param instream
-	 *            The input stream that contains the RSA Private Key.
+	 * @param instream The input stream that contains the RSA Private Key.
 	 * @return The RSAPublicKey.
 	 * @throws java.io.IOException
 	 */
@@ -616,16 +586,15 @@ public class RSAService
 	}
 
 	/**
-	 * Utility function that writes an RSA Public or Private key to an output stream in PEM format.
+	 * Utility function that writes an RSA Public or Private key to an output
+	 * stream in PEM format.
 	 *
-	 * @param outstream
-	 *            The stream to write the RSA key to.
-	 * @param pki
-	 *            The Key to be written to the stream.
+	 * @param outstream The stream to write the RSA key to.
+	 * @param pki The Key to be written to the stream.
 	 */
 	private <T> void writePEMKey(OutputStream outstream, T pki) throws IOException
 	{
-		OutputStreamWriter writer = new OutputStreamWriter(outstream, "UTF-8");
+		OutputStreamWriter writer = new OutputStreamWriter(outstream, StandardCharsets.UTF_8);
 		try (JcaPEMWriter pem = new JcaPEMWriter(writer))
 		{
 			pem.writeObject(pki);
@@ -635,10 +604,8 @@ public class RSAService
 	/**
 	 * Write the RSAPrivateKey to a stream in DER format.
 	 *
-	 * @param outstream
-	 *            The stream the DER key is to be written to.
-	 * @param key
-	 *            The RSAPrivatKey.
+	 * @param outstream The stream the DER key is to be written to.
+	 * @param key The RSAPrivatKey.
 	 * @throws IOException
 	 */
 	public void writeDERKey(OutputStream outstream, RSAPrivateKey key) throws IOException
@@ -653,10 +620,8 @@ public class RSAService
 	/**
 	 * Write the RSAPublicKey to a stream in DER format.
 	 *
-	 * @param outstream
-	 *            the stream the DER key is to be written to.
-	 * @param key
-	 *            the RSAPublicKey.
+	 * @param outstream the stream the DER key is to be written to.
+	 * @param key the RSAPublicKey.
 	 * @throws IOException
 	 */
 	public void writeDERKey(OutputStream outstream, RSAPublicKey key) throws IOException
@@ -670,30 +635,31 @@ public class RSAService
 	}
 
 	/**
-	 * Generate a Public / Private RSA key pair and write them to the designated file names.
+	 * Generate a Public / Private RSA key pair and write them to the designated
+	 * file names.
 	 *
-	 * @param private_filename
-	 *            The file name to which the RSA Private Key will be written.
-	 * @param public_filename
-	 *            The file name to which the RSA Public Key will be written.
+	 * @param private_filename The file name to which the RSA Private Key will
+	 * be written.
+	 * @param public_filename The file name to which the RSA Public Key will be
+	 * written.
 	 * @throws java.io.FileNotFoundException
 	 */
 	public void generateKey(String private_filename, String public_filename) throws FileNotFoundException, IOException
 	{
 		try (FileOutputStream fos_private = new FileOutputStream(private_filename);
-				FileOutputStream fos_public = new FileOutputStream(public_filename))
+			 FileOutputStream fos_public = new FileOutputStream(public_filename))
 		{
 			generateKey(fos_private, fos_public);
 		}
 	}
 
 	/**
-	 * Generate a Public / Private RSA key pair and write them to the designated Output Streams.
+	 * Generate a Public / Private RSA key pair and write them to the designated
+	 * Output Streams.
 	 *
-	 * @param os_private
-	 *            The stream to which the RSA Private Key will be written.
-	 * @param os_public
-	 *            The stream to which the RSA Public Key will be written.
+	 * @param os_private The stream to which the RSA Private Key will be
+	 * written.
+	 * @param os_public The stream to which the RSA Public Key will be written.
 	 * @throws java.io.IOException
 	 */
 	public void generateKey(OutputStream os_private, OutputStream os_public) throws IOException
@@ -701,7 +667,7 @@ public class RSAService
 		BigInteger publicExponent = new BigInteger("10001", 16);
 		SecureRandom secure = new SecureRandom();
 		RSAKeyGenerationParameters kparams = new RSAKeyGenerationParameters(publicExponent, secure,
-				keysize.getKeySize(), 80);
+																			keysize.getKeySize(), 80);
 
 		RSAKeyPairGenerator kpg = new RSAKeyPairGenerator();
 		kpg.init(kparams);
@@ -717,14 +683,14 @@ public class RSAService
 	}
 
 	/**
-	 * Generate a Public / Private RSA key pair and write them to the designated file names.
+	 * Generate a Public / Private RSA key pair and write them to the designated
+	 * file names.
 	 *
-	 * @param private_filename
-	 *            The file name to which the RSA Private Key will be written.
-	 * @param public_filename
-	 *            The file name to which the RSA Public Key will be written.
-	 * @param password
-	 *            The RSA Private Key will be encrypted with this password.
+	 * @param private_filename The file name to which the RSA Private Key will
+	 * be written.
+	 * @param public_filename The file name to which the RSA Public Key will be
+	 * written.
+	 * @param password The RSA Private Key will be encrypted with this password.
 	 * @throws java.io.FileNotFoundException
 	 * @throws java.security.NoSuchAlgorithmException
 	 * @throws org.bouncycastle.operator.OperatorCreationException
@@ -732,24 +698,23 @@ public class RSAService
 	 */
 	public void generateKey(String private_filename, String public_filename, char[] password)
 			throws FileNotFoundException, NoSuchAlgorithmException, OperatorCreationException,
-			UnsupportedEncodingException, IOException
+				   UnsupportedEncodingException, IOException
 	{
 		try (FileOutputStream fos_private = new FileOutputStream(private_filename);
-				FileOutputStream fos_public = new FileOutputStream(public_filename))
+			 FileOutputStream fos_public = new FileOutputStream(public_filename))
 		{
 			generateKey(fos_private, fos_public, password);
 		}
 	}
 
 	/**
-	 * Generate a Public / Private RSA key pair and write them to the designated Output Streams.
+	 * Generate a Public / Private RSA key pair and write them to the designated
+	 * Output Streams.
 	 *
-	 * @param os_private
-	 *            The stream to which the RSA Private Key will be written.
-	 * @param os_public
-	 *            The stream to which the RSA Public Key will be written.
-	 * @param password
-	 *            The RSA Private Key will be encrypted with this password.
+	 * @param os_private The stream to which the RSA Private Key will be
+	 * written.
+	 * @param os_public The stream to which the RSA Public Key will be written.
+	 * @param password The RSA Private Key will be encrypted with this password.
 	 * @throws java.security.NoSuchAlgorithmException
 	 * @throws org.bouncycastle.operator.OperatorCreationException
 	 * @throws org.bouncycastle.util.io.pem.PemGenerationException
@@ -758,7 +723,7 @@ public class RSAService
 	 */
 	public void generateKey(OutputStream os_private, OutputStream os_public, char[] password)
 			throws NoSuchAlgorithmException, OperatorCreationException, PemGenerationException,
-			UnsupportedEncodingException, IOException
+				   UnsupportedEncodingException, IOException
 	{
 		final KeyPairGenerator kpg = KeyPairGenerator.getInstance("RSA");
 		final SecureRandom secure = new SecureRandom();
@@ -766,12 +731,12 @@ public class RSAService
 		KeyPair keyPair = kpg.generateKeyPair();
 
 		final PemObject pem = encryptKey(keyPair, password);
-		try (JcaPEMWriter writer = new JcaPEMWriter(new OutputStreamWriter(os_private, "UTF-8")))
+		try (JcaPEMWriter writer = new JcaPEMWriter(new OutputStreamWriter(os_private, StandardCharsets.UTF_8)))
 		{
 			writer.writeObject(pem);
 		}
 
-		try (JcaPEMWriter writer = new JcaPEMWriter(new OutputStreamWriter(os_public, "UTF-8")))
+		try (JcaPEMWriter writer = new JcaPEMWriter(new OutputStreamWriter(os_public, StandardCharsets.UTF_8)))
 		{
 			writer.writeObject(keyPair.getPublic());
 		}
@@ -780,10 +745,8 @@ public class RSAService
 	/**
 	 * Encrypt the KeyPair with the password and return it as a PEM object.
 	 *
-	 * @param keyPair
-	 *            The RSA Private / Public Key Pair.
-	 * @param password
-	 *            The RSA Private Key will be encrypted with this password.
+	 * @param keyPair The RSA Private / Public Key Pair.
+	 * @param password The RSA Private Key will be encrypted with this password.
 	 * @return A PEM object with the encrypted KeyPair..
 	 * @throws OperatorCreationException
 	 * @throws PemGenerationException
@@ -803,12 +766,11 @@ public class RSAService
 	}
 
 	/**
-	 * Checks for the existence of the RSA Private and Public Key and returns true if they exist or false if they don't.
+	 * Checks for the existence of the RSA Private and Public Key and returns
+	 * true if they exist or false if they don't.
 	 *
-	 * @param private_filename
-	 *            The file containing the RSA Private Key.
-	 * @param public_filename
-	 *            The file containing the RSA Public Key.
+	 * @param private_filename The file containing the RSA Private Key.
+	 * @param public_filename The file containing the RSA Public Key.
 	 * @return True if the key pair exist false if they do not.
 	 */
 	public boolean areKeysPresent(String private_filename, String public_filename)

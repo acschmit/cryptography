@@ -4,6 +4,9 @@ An easy to use AES and RSA cryptography library written in java, built on the Bo
 
 If you develop in both Java and C# then this project and the <a href="https://github.com/acschmit/cryptography.Net" target="_blank">C# project</a> are worth taking a look at.  They share the same API.  The Unit Tests and Examples are the same between them as well to illustrate their similarity.
 
+## Version 1.0.10-SNAPSHOT Updates
+*Upgraded to Bouncy Castle 1.54 libraries.
+
 ## Version 1.0.8-SNAPSHOT Updates
 ### Project
 *TBD.
@@ -21,7 +24,7 @@ Bouncy Castle saves PEM keys in PKCS#1 format but it can read PEM keys in PKCS#8
 The [license](LICENSE.txt), including licenses for dependent software, can be read [here](LICENSE.txt).
 
 ##External Dependencies
-This library is dependent on the following jar files in <a href="http://www.bouncycastle.org" target="_blank">Bouncy Castle Version 1.52</a>.
+This library is dependent on the following jar files in <a href="http://www.bouncycastle.org" target="_blank">Bouncy Castle Version 1.54</a>.
 
 * bcpkix-jdk15on.jar
 * bcprov-jdk15on.jar
@@ -31,9 +34,9 @@ Be sure you have Maven installed in your IDE.
 
 Either download the zip file or clone the repository to obtain the full project source. Compile the project and it will install all jar files in your local repository.
 
-Create a new Maven project and search the repository for **org.albertschmitt**.  Add cryptography version 1.0.7.  Once this is done your project should have the following dependencies.
+Create a new Maven project and search the repository for **org.albertschmitt**.  Add cryptography version 1.0.10.  Once this is done your project should have the following dependencies.
 
-* cryptography-1.0.7.jar
+* cryptography-1.0.10.jar
 * bcpkix-jdk15on.jar
 * bcprov-jdk15on.jar
 
