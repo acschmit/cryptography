@@ -195,6 +195,7 @@ public class RSAService
 	 * @param key The key to be used.
 	 * @param forEncryption True to encrypt, false to decrypt.
 	 */
+	@SuppressWarnings("NestedAssignment")
 	private void doCipher(InputStream instream, OutputStream outstream, Key key, Boolean forEncryption)
 			throws IOException, InvalidCipherTextException
 	{
@@ -311,7 +312,7 @@ public class RSAService
 	public RSAPrivateKey readPrivateKey(String filename) throws FileNotFoundException, IOException
 	{
 		RSAPrivateKey key;
-		try (FileInputStream in = new FileInputStream(filename))
+		try ( FileInputStream in = new FileInputStream(filename))
 		{
 			key = readPrivateKey(in);
 		}
@@ -328,9 +329,9 @@ public class RSAService
 	public RSAPrivateKey readPrivateKey(InputStream instream) throws IOException
 	{
 		RSAPrivateKey key = null;
-		try (InputStreamReader reader = new InputStreamReader(instream))
+		try ( InputStreamReader reader = new InputStreamReader(instream))
 		{
-			try (PEMParser pem = new PEMParser(reader))
+			try ( PEMParser pem = new PEMParser(reader))
 			{
 				Object obj = pem.readObject();
 				if (obj instanceof PEMKeyPair)
@@ -362,7 +363,7 @@ public class RSAService
 			throws FileNotFoundException, IOException, OperatorCreationException, PKCSException
 	{
 		RSAPrivateKey key;
-		try (FileInputStream instream = new FileInputStream(filename))
+		try ( FileInputStream instream = new FileInputStream(filename))
 		{
 			key = readPrivateKey(instream, password);
 		}
@@ -384,9 +385,9 @@ public class RSAService
 			throws IOException, OperatorCreationException, PKCSException
 	{
 		RSAPrivateKey key;
-		try (InputStreamReader reader = new InputStreamReader(instream))
+		try ( InputStreamReader reader = new InputStreamReader(instream))
 		{
-			try (PEMParser pem = new PEMParser(reader))
+			try ( PEMParser pem = new PEMParser(reader))
 			{
 				PKCS8EncryptedPrivateKeyInfo pair = (PKCS8EncryptedPrivateKeyInfo) pem.readObject();
 				JceOpenSSLPKCS8DecryptorProviderBuilder jce = new JceOpenSSLPKCS8DecryptorProviderBuilder();
@@ -412,7 +413,7 @@ public class RSAService
 	public RSAPrivateKey readPrivateKeyDER(String filename) throws FileNotFoundException, IOException
 	{
 		RSAPrivateKey key;
-		try (FileInputStream instream = new FileInputStream(filename))
+		try ( FileInputStream instream = new FileInputStream(filename))
 		{
 			key = readPrivateKeyDER(instream);
 		}
@@ -440,7 +441,7 @@ public class RSAService
 			throws FileNotFoundException, IOException, OperatorCreationException, PKCSException
 	{
 		RSAPrivateKey key;
-		try (FileInputStream instream = new FileInputStream(filename))
+		try ( FileInputStream instream = new FileInputStream(filename))
 		{
 			key = readPrivateKeyDER(instream, password);
 		}
@@ -475,7 +476,7 @@ public class RSAService
 	public RSAPublicKey readPublicKey(String filename) throws FileNotFoundException, IOException
 	{
 		RSAPublicKey key;
-		try (FileInputStream in = new FileInputStream(filename))
+		try ( FileInputStream in = new FileInputStream(filename))
 		{
 			key = readPublicKey(in);
 		}
@@ -492,9 +493,9 @@ public class RSAService
 	public RSAPublicKey readPublicKey(InputStream instream) throws IOException
 	{
 		SubjectPublicKeyInfo pki;
-		try (InputStreamReader reader = new InputStreamReader(instream))
+		try ( InputStreamReader reader = new InputStreamReader(instream))
 		{
-			try (PEMParser pem = new PEMParser(reader))
+			try ( PEMParser pem = new PEMParser(reader))
 			{
 				pki = (SubjectPublicKeyInfo) pem.readObject();
 			}
@@ -518,7 +519,7 @@ public class RSAService
 	public RSAPublicKey readPublicKeyDER(String filename) throws FileNotFoundException, IOException
 	{
 		RSAPublicKey key;
-		try (FileInputStream instream = new FileInputStream(filename))
+		try ( FileInputStream instream = new FileInputStream(filename))
 		{
 			key = readPublicKeyDER(instream);
 		}
@@ -552,7 +553,7 @@ public class RSAService
 	public RSAPublicKey readPublicKeyFromPrivate(String filename) throws FileNotFoundException, IOException
 	{
 		RSAPublicKey key;
-		try (FileInputStream in = new FileInputStream(filename))
+		try ( FileInputStream in = new FileInputStream(filename))
 		{
 			key = readPublicKeyFromPrivate(in);
 		}
@@ -570,9 +571,9 @@ public class RSAService
 	public RSAPublicKey readPublicKeyFromPrivate(InputStream instream) throws IOException
 	{
 		org.bouncycastle.openssl.PEMKeyPair pkp;
-		try (InputStreamReader reader = new InputStreamReader(instream))
+		try ( InputStreamReader reader = new InputStreamReader(instream))
 		{
-			try (PEMParser pem = new PEMParser(reader))
+			try ( PEMParser pem = new PEMParser(reader))
 			{
 				pkp = (PEMKeyPair) pem.readObject();
 			}
@@ -595,7 +596,7 @@ public class RSAService
 	private <T> void writePEMKey(OutputStream outstream, T pki) throws IOException
 	{
 		OutputStreamWriter writer = new OutputStreamWriter(outstream, StandardCharsets.UTF_8);
-		try (JcaPEMWriter pem = new JcaPEMWriter(writer))
+		try ( JcaPEMWriter pem = new JcaPEMWriter(writer))
 		{
 			pem.writeObject(pki);
 		}
@@ -613,8 +614,12 @@ public class RSAService
 		AsymmetricKeyParameter keyParam = key.getKey();
 		PrivateKeyInfo pki = PrivateKeyInfoFactory.createPrivateKeyInfo(keyParam);
 		byte[] keybytes = pki.getEncoded();
-		outstream.write(keybytes);
-		outstream.close();
+
+		try (outstream)
+		{
+			// TODO: test.  added try block. 6/15/2022.
+			outstream.write(keybytes);
+		}
 	}
 
 	/**
@@ -630,8 +635,11 @@ public class RSAService
 		SubjectPublicKeyInfo pki = SubjectPublicKeyInfoFactory.createSubjectPublicKeyInfo(keyParam);
 		byte[] keybytes = pki.getEncoded();
 
-		outstream.write(keybytes);
-		outstream.close();
+		try (outstream)
+		{
+			// TODO: test.  added try block. 6/15/2022.
+			outstream.write(keybytes);
+		}
 	}
 
 	/**
@@ -646,8 +654,7 @@ public class RSAService
 	 */
 	public void generateKey(String private_filename, String public_filename) throws FileNotFoundException, IOException
 	{
-		try (FileOutputStream fos_private = new FileOutputStream(private_filename);
-			 FileOutputStream fos_public = new FileOutputStream(public_filename))
+		try ( FileOutputStream fos_private = new FileOutputStream(private_filename);  FileOutputStream fos_public = new FileOutputStream(public_filename))
 		{
 			generateKey(fos_private, fos_public);
 		}
@@ -700,8 +707,7 @@ public class RSAService
 			throws FileNotFoundException, NoSuchAlgorithmException, OperatorCreationException,
 				   UnsupportedEncodingException, IOException
 	{
-		try (FileOutputStream fos_private = new FileOutputStream(private_filename);
-			 FileOutputStream fos_public = new FileOutputStream(public_filename))
+		try ( FileOutputStream fos_private = new FileOutputStream(private_filename);  FileOutputStream fos_public = new FileOutputStream(public_filename))
 		{
 			generateKey(fos_private, fos_public, password);
 		}
@@ -731,12 +737,12 @@ public class RSAService
 		KeyPair keyPair = kpg.generateKeyPair();
 
 		final PemObject pem = encryptKey(keyPair, password);
-		try (JcaPEMWriter writer = new JcaPEMWriter(new OutputStreamWriter(os_private, StandardCharsets.UTF_8)))
+		try ( JcaPEMWriter writer = new JcaPEMWriter(new OutputStreamWriter(os_private, StandardCharsets.UTF_8)))
 		{
 			writer.writeObject(pem);
 		}
 
-		try (JcaPEMWriter writer = new JcaPEMWriter(new OutputStreamWriter(os_public, StandardCharsets.UTF_8)))
+		try ( JcaPEMWriter writer = new JcaPEMWriter(new OutputStreamWriter(os_public, StandardCharsets.UTF_8)))
 		{
 			writer.writeObject(keyPair.getPublic());
 		}
@@ -757,7 +763,7 @@ public class RSAService
 		final JceOpenSSLPKCS8EncryptorBuilder encryptorBuilder = new JceOpenSSLPKCS8EncryptorBuilder(
 				PKCS8Generator.PBE_SHA1_3DES);
 		encryptorBuilder.setRandom(new SecureRandom());
-		encryptorBuilder.setPasssword(password);
+		encryptorBuilder.setPassword(password);
 		encryptorBuilder.setIterationCount(10000);
 		OutputEncryptor oe = encryptorBuilder.build();
 		final JcaPKCS8Generator gen = new JcaPKCS8Generator(keyPair.getPrivate(), oe);

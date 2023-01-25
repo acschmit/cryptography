@@ -220,12 +220,13 @@ public class AESService
 	 * @param cipher A PaddedBufferedBlockCipher configured to encrypt or
 	 * decrypt.
 	 */
+	@SuppressWarnings("NestedAssignment")
 	private void doCipher(InputStream instream, OutputStream outstream, PaddedBufferedBlockCipher cipher) throws IOException
 	{
 		byte[] buffer = new byte[1024];
 		int blocksize = buffer.length;
 
-		try (CipherOutputStream cos = new CipherOutputStream(outstream, cipher))
+		try ( CipherOutputStream cos = new CipherOutputStream(outstream, cipher))
 		{
 			while ((blocksize = instream.read(buffer, 0, blocksize)) != -1)
 			{
